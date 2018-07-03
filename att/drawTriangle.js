@@ -1,5 +1,6 @@
 function drawTriangle(base,side1,side2,height,ra) {
         var unit = "cm";
+	var font = "16px Arial";
 	
 	// First create the canvas
         // The width and height probably shouldn't be magic numbers
@@ -98,7 +99,7 @@ function drawTriangle(base,side1,side2,height,ra) {
         ctx.fill();
 
         // Label sides
-        ctx.font = "12px Arial";
+        ctx.font = font;
         ctx.fillStyle = "Black";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
