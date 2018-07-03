@@ -1,5 +1,7 @@
 function drawTriangle(base,side1,side2,height,ra) {
-        // First create the canvas
+        var unit = "cm";
+	
+	// First create the canvas
         // The width and height probably shouldn't be magic numbers
         var canvas = document.createElement("canvas");
         canvas.width = 300;
@@ -100,9 +102,9 @@ function drawTriangle(base,side1,side2,height,ra) {
         ctx.fillStyle = "Black";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(base,label_base_x,label_base_y);
-        ctx.fillText(side1,label_side1_x,label_side1_y);
-        ctx.fillText(side2,label_side2_x,label_side2_y);
+        ctx.fillText(base + unit,label_base_x,label_base_y);
+        ctx.fillText(side1 + unit,label_side1_x,label_side1_y);
+        ctx.fillText(side2 + unit,label_side2_x,label_side2_y);
 
         // Draw and label height - only if not a right angle triangle
         if (!ra) {
