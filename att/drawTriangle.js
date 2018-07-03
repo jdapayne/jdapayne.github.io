@@ -113,7 +113,7 @@ function drawTriangle(base,side1,side2,height,ra) {
             ctx.moveTo(Cx,Cy);
             ctx.lineTo(htx,hty);
             ctx.stroke();
-            ctx.fillText(height,label_height_x,label_height_y);
+            ctx.fillText(height+unit,label_height_x,label_height_y);
         }
 
         // Extend base if needed
