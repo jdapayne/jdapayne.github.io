@@ -1,6 +1,6 @@
 function drawTriangle(base,side1,side2,height,ra) {
         var unit = "cm";
-	var font = "16px Arial";
+	var font = "25px Arial";
 	
 	// First create the canvas
         // The width and height probably shouldn't be magic numbers
