@@ -17,6 +17,6 @@ function Triangle(base, side1, side2, height) {
     this.isIsosceles = function () {
         return (this.side1 === this.side2)
     }
-}
+
 
 
