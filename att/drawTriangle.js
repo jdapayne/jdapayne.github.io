@@ -147,7 +147,7 @@ function drawTriangle(triangle,canvas,options) {
         ctx.moveTo(Cx,Cy);
         ctx.lineTo(htx,hty);
         ctx.stroke();
-        ctx.fillText(height+settings.unit,label_height_x,label_height_y);
+        ctx.fillText(triangle.height+settings.unit,label_height_x,label_height_y);
     }
 
     // Extend base if needed
