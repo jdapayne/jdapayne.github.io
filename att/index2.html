@@ -13,7 +13,7 @@
     <script type="text/javascript" charset="utf-8">
         function addTriangle () {
             idx = Math.floor(Math.random()*2000);
-            $.getJSON("att/triangles500.json",function(data){
+            $.getJSON("triangles500.json",function(data){
                 let triangle = $.extend(new Triangle, data[idx]);
                 let canvas = $("<canvas width=300, height=250/>");
 		drawTriangle(triangle,canvas[0]);
