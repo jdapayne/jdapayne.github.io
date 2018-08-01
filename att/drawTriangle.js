@@ -17,9 +17,10 @@ function Triangle(base, side1, side2, height) {
     this.isIsosceles = function () {
         return (this.side1 === this.side2)
     }
+}
 
 function drawTriangle(triangle,canvas,options) {
-    if !(triangle instanceOf Triangle){
+    if (!(triangle instanceof Triangle)){
         throw new Error("drawTriangle is to be called on a triangle object only")
     }
 
@@ -30,6 +31,8 @@ function drawTriangle(triangle,canvas,options) {
     };
 
     var settings = $.extend({}, defaults, options);
+
+    var ctx = canvas.getContext("2d");
     
     // First create the canvas
     // The width and height probably shouldn't be magic numbers
@@ -129,13 +132,13 @@ function drawTriangle(triangle,canvas,options) {
     ctx.fill();
 
     // Label sides
-    ctx.font = font;
+    ctx.font = settings.font;
     ctx.fillStyle = "Black";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(triangle.base + unit,label_base_x,label_base_y);
-    ctx.fillText(triangle.side1 + unit,label_side1_x,label_side1_y);
-    ctx.fillText(triangl.side2 + unit,label_side2_x,label_side2_y);
+    ctx.fillText(triangle.base + settings.unit,label_base_x,label_base_y);
+    ctx.fillText(triangle.side1 + settings.unit,label_side1_x,label_side1_y);
+    ctx.fillText(triangle.side2 + settings.unit,label_side2_x,label_side2_y);
 
     // Draw and label height - only if not a right angle triangle
     if (!triangle.isRightAngled()) {
@@ -144,7 +147,7 @@ function drawTriangle(triangle,canvas,options) {
         ctx.moveTo(Cx,Cy);
         ctx.lineTo(htx,hty);
         ctx.stroke();
-        ctx.fillText(height+unit,label_height_x,label_height_y);
+        ctx.fillText(height+settings.unit,label_height_x,label_height_y);
     }
 
     // Extend base if needed
@@ -165,9 +168,9 @@ function drawTriangle(triangle,canvas,options) {
 }
 
 function rotate(angle,x,y) {
-	// Translate so centre is now origin
-	var newx, newy;
-	newx = Math.cos(angle)*x - Math.sin(angle)*y;
-	newy = Math.sin(angle)*x + Math.cos(angle)*y;
-	return [newx,newy];
+        // Translate so centre is now origin
+        var newx, newy;
+        newx = Math.cos(angle)*x - Math.sin(angle)*y;
+        newy = Math.sin(angle)*x + Math.cos(angle)*y;
+        return [newx,newy];
 }
