@@ -9,12 +9,27 @@
             border: thin solid black;
             text-align: center
         }
+        .options-part {
+            display: inline-block;
+            padding-right: 20px;
+            border: thin solid black;
+            vertical-align: top
+        }
     </style>
 </head>
 <body>
-    <div class="instructions">
-        <p> Number of triangles: <input type="text" id="n_triangles" value="1"></p>
-        <p> Maximum side length: <input type="text" id="max_side" value="500"></p>
+    <div class="options">
+        <div class="options-part">
+            <p> Number of triangles: <input type="text" id="n_triangles" value="4"/></p>
+            <p> Maximum side length: <input type="text" id="max_side" value="100"/></p>
+        </div>
+        <div class="options-part">
+            <p> Units: <input type="text" id="units" value="cm"></p>
+            <p> <input type="radio" name="scale" id="scale1" value="1" checked/><label for="scale1">Integer</label>
+                <input type="radio" name="scale" id="scale10" value="10"/><label for="scale10">1d.p.</label>
+                <input type="radio" name="scale" id="scale100" value="100"/><label for="scale100">2d.p.</label>
+            </p>
+        </div>
         <p><button id="add_triangle" disabled>Go!</button>
     </div>
 
@@ -34,12 +49,28 @@
         })
 
         function addTriangle () {
+            var n = $("#n_triangles").val();
+            var max_side = $("#max_side").val();
+            var scale = $("input[name=scale]:checked").val();
+            var units = $("#units").val()
+
+            max_side = max_side * scale; // get bigger ones if I'm then scaling down
+
             $(".display-box").html("");
-            idx = Math.floor(Math.random()*2000);
-            let triangle = $.extend(new Triangle, triangles_data[idx]);
-            let canvas = $("<canvas width=300, height=250/>");
-            drawTriangle(triangle,canvas[0]);
-		canvas.appendTo($(".display-box"))
+
+            var max_index = triangles_data.filter(function (t){
+                return (Math.max(t.base,t.side1,t.side2) <= max_side)
+            }).length; // actually one more than the biggest index
+
+            for (var i = 0; i < n; i++) {
+                let idx = Math.floor(Math.random()*max_index);
+                let triangle = $.extend(new Triangle, triangles_data[idx]);
+                triangle.scaleDown(scale); //just to try with decimals
+                let canvas = $('<canvas width=300, height=250 class="triangle-view"/>');
+                drawTriangle(triangle,canvas[0],{unit:units});
+                canvas.appendTo($(".display-box"))
+            };
+
         }
 
     </script>

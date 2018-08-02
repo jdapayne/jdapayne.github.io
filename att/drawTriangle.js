@@ -21,6 +21,14 @@ function Triangle(base, side1, side2, height) {
     this.maxSide = function () {
         return Math.max(this.base,this.side1,this.side2)
     }
+
+    // separate scaleDown to avoid floating point errors
+    this.scaleDown = function (sf) {
+        this.base = this.base / sf;
+        this.side1 = this.side1 / sf;
+        this.side2 = this.side2 / sf;
+        this.height = this.height /sf;
+    }
 }
 
 var testTriangle = new Triangle(8,5,5,3);
@@ -127,9 +135,9 @@ function drawTriangle(triangle,canvas,options) {
     ctx.fillStyle = "Black";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(triangle.base + settings.unit,labels.base.x,labels.base.y);
-    ctx.fillText(triangle.side1 + settings.unit,labels.side1.x,labels.side1.y);
-    ctx.fillText(triangle.side2 + settings.unit,labels.side2.x,labels.side2.y);
+    ctx.fillText(triangle.base.toString() + settings.unit,labels.base.x,labels.base.y);
+    ctx.fillText(triangle.side1.toString() + settings.unit,labels.side1.x,labels.side1.y);
+    ctx.fillText(triangle.side2.toString() + settings.unit,labels.side2.x,labels.side2.y);
 
     // Draw and label height - only if not a right angle triangle
     if (!triangle.isRightAngled()) {
