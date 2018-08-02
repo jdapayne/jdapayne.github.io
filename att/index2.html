@@ -24,7 +24,7 @@
     <script src="drawTriangle.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
-            var triangles-data;
+            var triangles_data;
             $.getJSON("triangles500.json",function(data){
                 triangles-data = data;
                 $("#add_triangle").click(addTriangle);
@@ -35,7 +35,7 @@
         function addTriangle () {
             $(".display-box").html("");
             idx = Math.floor(Math.random()*2000);
-            let triangle = $.extend(new Triangle, triangle-data[idx]);
+            let triangle = $.extend(new Triangle, triangle_data[idx]);
             let canvas = $("<canvas width=300, height=250/>");
             drawTriangle(triangle,canvas[0]);
 		canvas.appendTo($(".display-box"))
