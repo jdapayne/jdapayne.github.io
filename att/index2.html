@@ -12,23 +12,35 @@
     </style>
 </head>
 <body>
-    <button id="add_triangle">New triangle</button>
+    <div class="instructions">
+        <p> Number of triangles: <input type="text" id="n_triangles">1</input></p>
+        <p> Maximum side length: <input type="text" id="max_side">500</input></p>
+        <p><button id="add_triangle" disabled>Go!</button>
+    </div>
+
     <div class="display-box"></div>
+
     <script src="../jquery.js" type="text/javascript" charset="utf-8"></script>
     <script src="drawTriangle.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            var triangles-data;
+            $.getJSON("triangles500.json",function(data){
+                triangles-data = data;
+                $("#add_triangle").click(addTriangle);
+                $("#add_triangle").attr("disabled",false);
+            })
+        })
+
         function addTriangle () {
             $(".display-box").html("");
             idx = Math.floor(Math.random()*2000);
-            $.getJSON("triangles500.json",function(data){
-                let triangle = $.extend(new Triangle, data[idx]);
-                let canvas = $("<canvas width=300, height=250/>");
-		drawTriangle(triangle,canvas[0]);
+            let triangle = $.extend(new Triangle, triangle-data[idx]);
+            let canvas = $("<canvas width=300, height=250/>");
+            drawTriangle(triangle,canvas[0]);
 		canvas.appendTo($(".display-box"))
-            });
         }
 
-        $("#add_triangle").click(addTriangle);
     </script>
 </body>
 </html>
