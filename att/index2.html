@@ -26,7 +26,7 @@
         $(document).ready(function () {
             var triangles_data;
             $.getJSON("triangles500.json",function(data){
-                triangles-data = data;
+                triangles_data = data;
                 $("#add_triangle").click(addTriangle);
                 $("#add_triangle").attr("disabled",false);
             })
