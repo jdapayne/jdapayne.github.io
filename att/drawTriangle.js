@@ -48,7 +48,7 @@ function drawTriangle(triangle,canvas,options) {
     var Ax = 0, Ay=triangle.height;
     var Bx = triangle.base, By = triangle.height;
     // bit of coordinate geometry gives:
-    var Cx = (triangle.base**2 + triangle.side1**2 - triangle.side2**2)/(2*triangle.base); 
+    var Cx = (triangle.base*triangle.base + triangle.side1*triangle.side1 - triangle.side2*triangle.side2)/(2*triangle.base); 
     var Cy = 0;
     var [htx, hty] = [Cx,Ay];
 
