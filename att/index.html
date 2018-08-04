@@ -1,9 +1,104 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""
+"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<script src="drawTriangle.js"></script>
-
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Triangles!</title>
+    <style type="text/css" media="screen">
+        .display-box {
+            text-align: center
+        }
+        .options-part {
+            display: inline-block;
+            padding-right: 20px;
+            vertical-align: top
+        }
+        .triangle-container {
+            display: inline-block;
+            border: thin solid black
+        }
+        .triangle-view {
+            /*border: thin solid red*/
+        }
+    </style>
+</head>
 <body>
-<script src="triangles100.js"> </script>
+    <div class="options">
+        <form>
+        <div class="options-part">
+            <p> Number of triangles: <input type="text" id="n_triangles" value="4"/></p>
+            <p> Maximum side length: <input type="text" id="max_side" value="100"/></p>
+        </div>
+        <div class="options-part">
+            <p> Units: <input type="text" id="units" value="cm"></p>
+            <p> <input type="radio" name="scale" id="scale1" value="1" checked/><label for="scale1">Integer</label>
+                <input type="radio" name="scale" id="scale10" value="10"/><label for="scale10">1d.p.</label>
+                <input type="radio" name="scale" id="scale100" value="100"/><label for="scale100">2d.p.</label>
+            </p>
+        </div>
+        <p><button id="add_triangle" type=submit disabled>Go!</button>
+        </form>
+    </div>
+
+    <div class="display-box"></div>
+
+    <script src="../jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="drawTriangle.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+        var triangles_data;
+
+        $(document).ready(function () {
+            $.getJSON("triangles500.json",function(data){
+                triangles_data = data;
+                $("#add_triangle").click(addTriangle);
+                $("#add_triangle").attr("disabled",false);
+                $(".display-box").on('click','.refresh', function (e) {
+                    var container = $(e.target).parent().parent();
+                    container.empty();
+                    randTriangleInContainer(container);
+                    e.preventDefault();
+                });
+            })
+        });
+
+        function randTriangleInContainer (container) {
+            var max_side = $("#max_side").val();
+            var scale = $("input[name=scale]:checked").val();
+            var units = $("#units").val()
+            max_side = max_side * scale; // get bigger ones if I'm then scaling down
+
+            var max_index = triangles_data.filter(function (t){
+                return (Math.max(t.base,t.side1,t.side2) <= max_side)
+            }).length; // actually one more than the biggest index
+
+            // get triangle
+            let idx = Math.floor(Math.random()*max_index);
+            let triangle = $.extend(new Triangle, triangles_data[idx]);
+            triangle.scaleDown(scale); //just to try with decimals
+            // draw triangle
+            drawTriangleIn(triangle,container,{unit:units});
+            // refresh button
+            var refresh = $('<p><img src="refresh.png" width=20 height=20 class="refresh"/></p>');
+            refresh.appendTo(container);
+        }
+
+
+        function addTriangle (e) {
+            var n = $("#n_triangles").val();
+
+            $(".display-box").html("");
+
+            for (var i = 0; i < n; i++) {
+                let container = $("<div/>");
+                container.addClass("triangle-container");
+                container.attr("id","tri-container"+i);
+                randTriangleInContainer(container);
+                container.appendTo($(".display-box"));
+
+            };
+             e.preventDefault();
+        }
+
+    </script>
 </body>
 </html>

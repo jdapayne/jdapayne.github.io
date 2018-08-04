@@ -51,6 +51,65 @@ function Point(x,y) {
     }
 }
 
+function TriangleView(triangle) {
+    this.A; //Point
+    this.B;
+    this.C;
+    this.ht;
+    this.labels;
+    //TODO: Move most of drawTriangle in to a constructor for this
+
+    this.minPoint =  function () { //top left of bounding rectangle
+        var minx = Math.min(this.A.x,this.B.x,this.C.x,this.ht.x);
+        var miny = Math.min(this.A.y,this.B.y,this.C.y,this.ht.y);
+        return new Point(minx, miny);
+    }
+
+    this.maxPoint = function () { //bottom right of bounding rectangle
+        var maxx = Math.max(this.A.x,this.B.x,this.C.x,this.ht.x);
+        var maxy = Math.max(this.A.y,this.B.y,this.C.y,this.ht.y);
+        return new Point(maxx, maxy);
+    }
+
+    // computed properties
+    this.width = function () { 
+        return this.maxPoint().x - this.minPoint().x;
+    }
+    this.height = function () {
+        return this.maxPoint().y - this.minPoint().y;
+    }
+    this.centre = function () {
+        if (this._centre) {return this._centre};
+        var x = (this.minPoint().x + this.maxPoint().x)/2;
+        var y = (this.minPoint().y + this.maxPoint().y)/2;
+        this._centre = new Point(x,y);
+        return this._centre;
+    }
+
+    this.allpoints = function () {
+        return [this.A,this.B,this.C,this.ht,
+            this.labels.base,this.labels.side1,this.labels.side2,this.labels.height]
+    }
+
+    // transformations
+    this.scale = function(sf) {
+        this.allpoints().forEach(function(p){
+            p.scale(sf)
+        });
+    }
+    this.rotate = function(angle) {
+        this.allpoints().forEach(function(p){
+            p.rotate(angle)
+        });
+    }
+    this.translate = function(x,y) {
+        this.allpoints().forEach(function(p){
+            p.x += x;
+            p.y += y
+        });
+    }
+}
+
 function drawTriangle(triangle,canvas,options) {
     if (!(triangle instanceof Triangle)){
         throw new Error("drawTriangle is to be called on a triangle object only")
@@ -68,64 +127,50 @@ function drawTriangle(triangle,canvas,options) {
 
     // Plot points - don't worry about scale etc yet
     // Vertices
-    var A = new Point(0, triangle.height);
-    var B = new Point(triangle.base, triangle.height);
+    
+    var view = new TriangleView();
+
+    view.A = new Point(0, triangle.height);
+    view.B = new Point(triangle.base, triangle.height);
     // bit of coordinate geometry gives:
-    var C = new Point(
+    view.C = new Point(
         (triangle.base*triangle.base + triangle.side1*triangle.side1 - triangle.side2*triangle.side2)/
             (2*triangle.base), 0)
-    var ht = new Point(C.x, A.y); // ht is where the altitude from C intersects AB
+    view.ht = new Point(view.C.x, view.A.y);
 
     // set a flag for if we need to extend base
     var overhangright=false, overhangleft=false;
-    if (C.x > B.x) {overhangright = true};
-    if (C.x < A.x) {overhangleft = true};
+    if (view.C.x > view.B.x) {overhangright = true};
+    if (view.C.x < view.A.x) {overhangleft = true};
     
     // Labels. Each object will have added a "text" attribute later
     var offset = triangle.maxSide()/settings.offset_factor;
-    var labels = {
-        base:   new Point((A.x+B.x)/2, A.y + offset),
-        side1:  new Point((A.x+C.x)/2 - offset, (A.y+C.y)/2),
-        side2:  new Point((B.x+C.x)/2 + offset, (B.y+C.y)/2),
-        height: new Point(C.x + offset, (2*A.y+C.y)/3)
+    view.labels = {
+        base:   new Point((view.A.x+view.B.x)/2, view.A.y + offset),
+        side1:  new Point((view.A.x+view.C.x)/2 - offset, (view.A.y+view.C.y)/2),
+        side2:  new Point((view.B.x+view.C.x)/2 + offset, (view.B.y+view.C.y)/2),
+        height: new Point(view.C.x + offset, (2*view.A.y+view.C.y)/3)
     }
 
     // a nudge if needed
-    if (overhangleft) {labels.height.x -= 2*offset};
+    if (overhangleft) {view.labels.height.x -= 2*offset};
 
     // First, rotate by a random amount
     var angle=2*Math.PI*Math.random();
+    view.rotate(angle);
 
-    var allpoints = [A,B,C,ht,labels.base,labels.side1,labels.side2,labels.height];
+    // Scale to 80% of canvas size
+    var sf = 0.8*Math.min(canvas.width/view.width(),canvas.height/view.height());
+    view.scale(sf);
 
-    allpoints.forEach(function(p){p.rotate(angle)});
-
-    // Scale so 80% of canvas size
-    var maxx = Math.max(A.x,B.x,C.x,ht.x);
-    var minx = Math.min(A.x,B.x,C.x,ht.x);
-    var maxy = Math.max(A.y,B.y,C.y,ht.y);
-    var miny = Math.min(A.y,B.y,C.y,ht.y);
-    var totalwidth = maxx - minx;
-    var totalheight = maxy - miny;
-    var sf = 0.8*Math.min(canvas.width/(maxx-minx),canvas.height/(maxy-miny)); //80% of full canvas size
-
-    allpoints.forEach(function(p){p.scale(sf)});
-
-    // Now shift everything so there's a 10% gap
-    // TO DO
-    var minx = Math.min(A.x,B.x,C.x,ht.x);
-    var miny = Math.min(A.y,B.y,C.y,ht.y);
-
-    allpoints.forEach(function(p){
-        p.x = p.x - minx + 0.1*canvas.width;
-        p.y = p.y - miny + 0.1*canvas.width;
-    });
+    // shift to centre
+    view.translate(canvas.width/2-view.centre().x , canvas.height/2-view.centre().y);
 
     // Draw triangle
-    ctx.moveTo(A.x,A.y);
-    ctx.lineTo(B.x,B.y);
-    ctx.lineTo(C.x,C.y);
-    ctx.lineTo(A.x,A.y)
+    ctx.moveTo(view.A.x,view.A.y);
+    ctx.lineTo(view.B.x,view.B.y);
+    ctx.lineTo(view.C.x,view.C.y);
+    ctx.lineTo(view.A.x,view.A.y)
     ctx.stroke();
     ctx.fillStyle="LightGrey";
     ctx.fill();
@@ -135,33 +180,59 @@ function drawTriangle(triangle,canvas,options) {
     ctx.fillStyle = "Black";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(triangle.base.toString() + settings.unit,labels.base.x,labels.base.y);
-    ctx.fillText(triangle.side1.toString() + settings.unit,labels.side1.x,labels.side1.y);
-    ctx.fillText(triangle.side2.toString() + settings.unit,labels.side2.x,labels.side2.y);
+    ctx.fillText(triangle.base.toString() + settings.unit,view.labels.base.x,view.labels.base.y);
+    ctx.fillText(triangle.side1.toString() + settings.unit,view.labels.side1.x,view.labels.side1.y);
+    ctx.fillText(triangle.side2.toString() + settings.unit,view.labels.side2.x,view.labels.side2.y);
 
     // Draw and label height - only if not a right angle triangle
     if (!triangle.isRightAngled()) {
         ctx.beginPath();
         ctx.setLineDash([5,3]);
-        ctx.moveTo(C.x,C.y);
-        ctx.lineTo(ht.x,ht.y);
+        ctx.moveTo(view.C.x,view.C.y);
+        ctx.lineTo(view.ht.x,view.ht.y);
         ctx.stroke();
-        ctx.fillText(triangle.height+settings.unit,labels.height.x,labels.height.y);
+        ctx.fillText(triangle.height+settings.unit,view.labels.height.x,view.labels.height.y);
     }
 
     // Extend base if needed
     if (overhangright) {
         ctx.beginPath();
         ctx.setLineDash([5,3]);
-        ctx.moveTo(B.x,B.y);
-        ctx.lineTo(ht.x,ht.y);
+        ctx.moveTo(view.B.x,view.B.y);
+        ctx.lineTo(view.ht.x,view.ht.y);
         ctx.stroke();
     }
     if (overhangleft) {
         ctx.beginPath();
         ctx.setLineDash([5,3]);
-        ctx.moveTo(A.x,A.y);
-        ctx.lineTo(ht.x,ht.y);
+        ctx.moveTo(view.A.x,view.A.y);
+        ctx.lineTo(view.ht.x,view.ht.y);
         ctx.stroke();
     }
+
+    // debug
+    //ctx.beginPath();
+    //// red view.centre()
+    //ctx.arc(view.centre().x, view.centre().y, 3, 0, 2 * Math.PI, false);
+    //ctx.fillStyle = 'red';
+    //ctx.fill();
+
+    //// blue view.minPoint()
+    //ctx.beginPath();
+    //ctx.arc(view.minPoint().x, view.minPoint().y, 3, 0, 2 * Math.PI, false);
+    //ctx.fillStyle = 'blue';
+    //ctx.fill();
+
+    //// gree view.maxPoint()
+    //ctx.beginPath();
+    //ctx.arc(view.maxPoint().x, view.maxPoint().y, 3, 0, 2 * Math.PI, false);
+    //ctx.fillStyle = 'red';
+    //ctx.fill();
 }
+
+function drawTriangleIn(triangle,div,options) {
+    let canvas = $('<canvas width=300, height=250 class="triangle-view"/>');
+    drawTriangle(triangle,canvas[0],options);
+    canvas.appendTo(div);
+}
+
