@@ -13,7 +13,7 @@
             padding-right: 20px;
             vertical-align: top
         }
-        .triangle-container {
+        .question-container {
             display: inline-block;
             border: thin solid black
         }
@@ -52,10 +52,23 @@
             $(".display-box").on('click','.refresh', function (e) {
                 var container = $(e.target).parent().parent();
                 container.empty();
-                randTriangleInContainer(container);
+                generateInContainer(container);
                 e.preventDefault();
             })
         });
+
+        function generateInContainer(container) {
+                let canvas = $('<canvas width=300, height=250 class="triangle-view"/>');
+
+                let nangles = Math.floor(2+Math.random()*3);
+                let aosl = Aosl.random(nangles);
+
+                drawAosl(aosl,canvas[0]);
+                canvas.appendTo(container);
+                var refresh = $('<p><img src="refresh.png" width=20 height=20 class="refresh"/></p>');
+                refresh.appendTo(container);
+        }
+            
 
         function generate (e) {
             var n = $("#n-questions").val();
@@ -64,11 +77,11 @@
 
             for (var i = 0; i < n; i++) {
                 let container = $("<div/>");
-                container.addClass("triangle-container");
-                container.attr("id","tri-container"+i);
-                let canvas = $('<canvas width=300, height=250 class="triangle-view"/>');
-                drawAosl(Aosl.random(3),canvas[0]);
-                canvas.appendTo(container);
+                container.addClass("question-container");
+                container.attr("id","question-container"+i);
+
+                generateInContainer(container);
+
                 container.appendTo($(".display-box"));
             };
             

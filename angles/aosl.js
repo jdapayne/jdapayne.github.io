@@ -46,12 +46,15 @@ function Aosl(angles,missing) {
     // Should probably have info about which angle is missing.
 }
 
-Aosl.random = function(n) {
+Aosl.random = function(n,minangle) {
     if (n < 2) return null;
+    if (minangle === undefined) minangle = 10;
+
     var angles = [];
     var left = 180;
     for (i=0; i<n-1; i++) {
-        let nextangle = 10+Math.floor(Math.random()*(left-20));
+        let maxangle = left - minangle*(n-i-1);
+        let nextangle = minangle + Math.floor(Math.random()*(maxangle-minangle));
         left -= nextangle;
         angles.push(nextangle);
     }
