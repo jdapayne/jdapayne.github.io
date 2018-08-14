@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Triangles!</title>
+    <style type="text/css" media="screen">
+        .display-box {
+            text-align: center
+        }
+        .options-part {
+            display: inline-block;
+            padding-right: 20px;
+            vertical-align: top
+        }
+        .triangle-container {
+            display: inline-block;
+            border: thin solid black
+        }
+        .triangle-view {
+            /*border: thin solid red*/
+        }
+    </style>
+</head>
+<body>
+    <div class="options">
+        <form>
+        <div class="options-part">
+            <p> Types: <br/>
+            <input type="checkbox" id="aosl" checked/><label for "aosl">Angles on a straight line</label>
+            <input type="checkbox" id="aaap" disabled/><label for "aosl">Angles around a point</label>
+            <input type="checkbox" id="voa" disabled/><label for "aosl">Vertically opposite angles</label>
+            <input type="checkbox" id="aiat" disabled/><label for "aosl">Angles in a triangle</label>
+            <input type="checkbox" id="aiaq" disabled/><label for "aosl">Angles in a quadrilateral</label></p>
+
+            <p>Number of questions:<input type="text" id="n-questions" value="4"></p>
+        </div>
+        <p><button id="generate" type=submit disabled>Go!</button>
+        </form>
+    </div>
+
+    <div class="display-box"></div>
+
+    <script src="../jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="aosl.js" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript" charset="utf-8">
+
+        $(document).ready(function () {
+            $("#generate").click(generate);
+            $("#generate").attr("disabled",false);
+            $(".display-box").on('click','.refresh', function (e) {
+                var container = $(e.target).parent().parent();
+                container.empty();
+                randTriangleInContainer(container);
+                e.preventDefault();
+            })
+        });
+
+        function generate (e) {
+            var n = $("#n-questions").val();
+            
+            $(".display-box").html("");
+
+            for (var i = 0; i < n; i++) {
+                let container = $("<div/>");
+                container.addClass("triangle-container");
+                container.attr("id","tri-container"+i);
+                let canvas = $('<canvas width=300, height=250 class="triangle-view"/>');
+                drawAosl(Aosl.random(3),canvas[0]);
+                canvas.appendTo(container);
+                container.appendTo($(".display-box"));
+            };
+            
+            e.preventDefault();
+        }
+    </script>
+
+</body>
+</html>
