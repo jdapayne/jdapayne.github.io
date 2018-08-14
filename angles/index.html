@@ -20,10 +20,21 @@
         .triangle-view {
             /*border: thin solid red*/
         }
+
+        #showoptions {
+            font-size: small;
+            display: none
+        }
+
+        p {
+            margin-top: 0.3em;
+            margin-bottom: 0.3em;
+        }
     </style>
 </head>
 <body>
-    <div class="options">
+    <p><a id="showoptions" href="#">Hide options</a></p>
+    <div id="options">
         <form>
         <div class="options-part">
             <p> Types: <br/>
@@ -74,7 +85,20 @@
                 var refresh = $('<p><img src="refresh.png" width=20 height=20 class="refresh"/></p>');
                 refresh.appendTo(container);
         }
-            
+
+        function hideOptions(e) {
+            $("#showoptions").html("Show options");
+            $("#options").slideUp();
+            $("#showoptions").unbind('click').click(showOptions);
+            if (e !== undefined) e.preventDefault();
+        }
+
+        function showOptions(e) {
+            $("#showoptions").html("Hide options");
+            $("#showoptions").unbind('click').click(hideOptions);
+            $("#options").slideDown();
+            if (e !== undefined) e.preventDefault();
+        }
 
         function generate (e) {
             var n = $("#n-questions").val();
@@ -91,6 +115,9 @@
                 container.appendTo($(".display-box"));
             };
             
+            $("#showoptions").show();
+            hideOptions();
+
             e.preventDefault();
         }
     </script>
