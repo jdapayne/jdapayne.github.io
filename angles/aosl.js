@@ -1,3 +1,52 @@
+// Useful things
+
+function randBetween(n,m) {
+    // return a random integer between n and m inclusive
+    return n+Math.floor(Math.random()*(m-n+1));
+}
+
+
+// Algebra stuff
+function LinExpr(a,b) {
+    this.a = a;
+    this.b = b;
+}
+
+LinExpr.prototype.toString = function() {
+    var string = "";
+
+    // x term
+    if (this.a===1) { string += "x"}
+    else if (this.a===-1) { string += "-x"}
+    else if (this.a!==0) { string += this.a + "x"}
+    
+    // sign
+    if (this.a!==0 && this.b>0) {string += " + "}
+    else if (this.a!==0 && this.b<0) {string += " - "}
+
+    // constant
+    if (this.b>0) {string += this.b}
+    else if (this.b<0 && this.a===0) {string += this.b}
+    else if (this.b<0) {string += Math.abs(this.b)}
+
+    return string;
+}
+
+LinExpr.prototype.eval = function(x) {
+    return this.a*x + this.b
+}
+
+LinExpr.prototype.add = function(that) {
+    return new LinExpr(this.a+that.a,this.b+that.b)
+}
+
+LinExpr.solve = function(expr1, expr2) {
+    // solves the two expressions set equal to each other
+    return (expr2.b-expr1.b)/(expr1.a-expr2.a)
+}
+
+
+// General geometry stuff
 function Point(x,y) {
     this.x = x;
     this.y = y;
@@ -28,9 +77,11 @@ Point.fromPolarDeg = function (r,theta) {
     return Point.fromPolar(r,theta)
 }
 
+// Aosl stuff
+
 function Aosl(angles,missing) {
     // angles :: [int]
-    // missing :: int
+    // missing :: [boolean]
     if (angles === []) {throw new Error("argument must not be empty")};
 
     let anglesum = 0;
@@ -59,13 +110,82 @@ Aosl.random = function(n,minangle) {
         angles.push(nextangle);
     }
     angles[n-1] = left;
-    missing = Math.floor(Math.random()*n);
+
+    var missing = [];
+    missing.fill(false,0,n-1);
+    missing[Math.floor(Math.random()*n)] = true;
+
+    return new Aosl(angles,missing);
+}
+
+Aosl.randomrep = function(n,m,minangle) {
+    // n: number of angle
+    // m: number of repeated angles (must be <= n)
+    if (n < 2) return null;
+    if (m < 1) return null;
+    if (m > n) return null;
+    if (minangle === undefined) minangle = 10;
+
+    // All missing - do as a separate case
+    if (n === m) {
+        var angles = [];
+        angles.length = n;
+        angles.fill(180/n);
+        var missing = [];
+        missing.length = n;
+        missing.fill(true);
+
+        return new Aosl(angles,missing);
+    }
+
+    var angles = [];
+    var missing = [];
+    missing.length = n;
+    missing.fill(false);
+
+    // choose a value for the missing angles
+    var maxrepangle = (180-minangle*(n-m))/m;
+    var repangle = minangle + Math.floor(Math.random()*(maxrepangle-minangle));
+
+    // choose values for the other angles
+    var otherangles = [];
+    var left = 180 - repangle*m;
+
+    for (i=0; i<n-m-1; i++) {
+        let maxangle = left - minangle*(n-m-i-1);
+        let nextangle = minangle + Math.floor(Math.random()*(maxangle-minangle));
+        left -= nextangle;
+        otherangles.push(nextangle);
+    }
+    otherangles[n-m-1] = left;
+
+    // choose where the missing angles are
+    var i=0;
+    while (i<m) {
+        let j = Math.floor(Math.random()*n);
+        if (missing[j] === false) {
+            missing[j] = true;
+            angles[j] = repangle;
+            i++
+        }
+    }
+
+    // fill in the other angles
+
+    var j=0;
+    for (i=0;i<n;i++) {
+        if (missing[i] === false) {
+            angles[i] = otherangles[j];
+            j++
+        }
+    }
 
     return new Aosl(angles,missing);
 }
 
 
-var testAosl = new Aosl([20,60,100],1);
+var testAosl = new Aosl([20,60,100],[false,true,false]);
+var testAosl2 = new Aosl([40,100,40],[1,0,1]);
 
 function AoslView(aosl,radius) {
     // aosl :: Aosl
@@ -88,7 +208,7 @@ function AoslView(aosl,radius) {
         let theta = aosl.angles[i]
         this.labels[i] = {
             pos: Point.fromPolarDeg(radius*(0.4+5/theta),totalangle+theta/2),
-            text: aosl.missing === i ? "x°" : aosl.angles[i].toString() + "°"
+            text: aosl.missing[i] == true ? "x°" : aosl.angles[i].toString() + "°"
         }
         totalangle+=theta;
     }

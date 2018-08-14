@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Angle generator</title>
-    <style type="text/css" media="screen">
+    <style type="text/css">
         .display-box {
             text-align: center
         }
@@ -15,7 +15,7 @@
         }
         .question-container {
             display: inline-block;
-            border: thin solid black
+            border: thin solid black;
         }
         .triangle-view {
             /*border: thin solid red*/
@@ -23,13 +23,20 @@
 
         #showoptions {
             font-size: small;
-            display: none
+            display: none 
         }
 
         p {
             margin-top: 0.3em;
             margin-bottom: 0.3em;
         }
+    </style>
+
+    <style type="text/css" media="print">
+        #showoptions {display: none !important}
+        #options {display: none !important}
+        .refresh {display: none !important}
+        .question-container {border: none;}
     </style>
 </head>
 <body>
@@ -38,7 +45,7 @@
         <form>
         <div class="options-part">
             <p> Types: <br/>
-            <input type="checkbox" id="aosl" checked/><label for "aosl">Angles on a straight line</label>
+            <input type="checkbox" id="aosl" checked disabled/><label for "aosl">Angles on a straight line</label>
             <input type="checkbox" id="aaap" disabled/><label for "aaap">Angles around a point</label>
             <input type="checkbox" id="voa" disabled/><label for "voa">Vertically opposite angles</label>
             <input type="checkbox" id="aiat" disabled/><label for "aiat">Angles in a triangle</label>
@@ -46,7 +53,7 @@
 
             <p> Options: <br/>
             <input type="checkbox" id="simple" checked disabled/><label for "simple">Simple</label>
-            <input type="checkbox" id="repeated" disabled/><label for "repeated">Repeated angles</label>
+            <input type="checkbox" id="repeated" checked disabled/><label for "repeated">Repeated angles</label>
             <input type="checkbox" id="algebra" disabled/><label for "aosl">Algebraic</label>
             <input type="checkbox" id="algebra-worded" disabled/><label for "aosl">Algebraic (worded)</label>
 
@@ -77,12 +84,28 @@
         function generateInContainer(container) {
                 let canvas = $('<canvas width=300, height=250 class="triangle-view"/>');
 
-                let nangles = Math.floor(2+Math.random()*3);
-                let aosl = Aosl.random(nangles);
+                // probabilities - should probably do these as an option argument
+                var p_allrepeated = 0.1;
+                var p_repeated = 0.4;
+
+                var aosl;
+
+                var diceroll = Math.random()
+                if (diceroll < p_allrepeated) {
+                    let n = randBetween(2,4);
+                    aosl = Aosl.randomrep(n,n);
+                } else if (diceroll < p_allrepeated + p_repeated) {
+                    let n = randBetween(3,4);
+                    let m = randBetween(2,n-1);
+                    aosl = Aosl.randomrep(n,m);
+                } else {
+                    let n = randBetween(2,4);
+                    aosl = Aosl.random(n);
+                }
 
                 drawAosl(aosl,canvas[0]);
                 canvas.appendTo(container);
-                var refresh = $('<p><img src="refresh.png" width=20 height=20 class="refresh"/></p>');
+                var refresh = $('<p><img src="refresh.png" width=15 height=15 class="refresh"/></p>');
                 refresh.appendTo(container);
         }
 
