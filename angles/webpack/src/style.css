@@ -1,0 +1,29 @@
+.display-box {
+    text-align: center
+}
+
+.options-part {
+    display: inline-block;
+    padding-right: 20px;
+    vertical-align: top
+}
+.question-container {
+    display: inline-block;
+    border: thin solid black;
+}
+
+#showoptions {
+    font-size: small;
+}
+
+p {
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+}
+
+@media only print {
+    #showoptions {display: none !important}
+    #options {display: none !important}
+    .refresh {display: none !important}
+    .question-container {border: none;}
+}

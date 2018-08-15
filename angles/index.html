@@ -4,41 +4,8 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Angle generator</title>
-    <style type="text/css">
-        .display-box {
-            text-align: center
-        }
-        .options-part {
-            display: inline-block;
-            padding-right: 20px;
-            vertical-align: top
-        }
-        .question-container {
-            display: inline-block;
-            border: thin solid black;
-        }
-        .triangle-view {
-            /*border: thin solid red*/
-        }
-
-        #showoptions {
-            font-size: small;
-            display: none 
-        }
-
-        p {
-            margin-top: 0.3em;
-            margin-bottom: 0.3em;
-        }
-    </style>
-
-    <style type="text/css" media="print">
-        #showoptions {display: none !important}
-        #options {display: none !important}
-        .refresh {display: none !important}
-        .question-container {border: none;}
-    </style>
 </head>
+
 <body>
     <p><a id="showoptions" href="#">Hide options</a></p>
     <div id="options">
@@ -65,85 +32,7 @@
 
     <div class="display-box"></div>
 
-    <script src="../jquery.js" type="text/javascript" charset="utf-8"></script>
-    <script src="aosl.js" type="text/javascript" charset="utf-8"></script>
-
-    <script type="text/javascript" charset="utf-8">
-
-        $(document).ready(function () {
-            $("#generate").click(generate);
-            $("#generate").attr("disabled",false);
-            $(".display-box").on('click','.refresh', function (e) {
-                var container = $(e.target).parent().parent();
-                container.empty();
-                generateInContainer(container);
-                e.preventDefault();
-            })
-        });
-
-        function generateInContainer(container) {
-                let canvas = $('<canvas width=300, height=250 class="triangle-view"/>');
-
-                // probabilities - should probably do these as an option argument
-                var p_allrepeated = 0.1;
-                var p_repeated = 0.4;
-
-                var aosl;
-
-                var diceroll = Math.random()
-                if (diceroll < p_allrepeated) {
-                    let n = randBetween(2,4);
-                    aosl = Aosl.randomrep(n,n);
-                } else if (diceroll < p_allrepeated + p_repeated) {
-                    let n = randBetween(3,4);
-                    let m = randBetween(2,n-1);
-                    aosl = Aosl.randomrep(n,m);
-                } else {
-                    let n = randBetween(2,4);
-                    aosl = Aosl.random(n);
-                }
-
-                drawAosl(aosl,canvas[0]);
-                canvas.appendTo(container);
-                var refresh = $('<p><img src="refresh.png" width=15 height=15 class="refresh"/></p>');
-                refresh.appendTo(container);
-        }
-
-        function hideOptions(e) {
-            $("#showoptions").html("Show options");
-            $("#options").slideUp();
-            $("#showoptions").unbind('click').click(showOptions);
-            if (e !== undefined) e.preventDefault();
-        }
-
-        function showOptions(e) {
-            $("#showoptions").html("Hide options");
-            $("#showoptions").unbind('click').click(hideOptions);
-            $("#options").slideDown();
-            if (e !== undefined) e.preventDefault();
-        }
-
-        function generate (e) {
-            var n = $("#n-questions").val();
-            
-            $(".display-box").html("");
-
-            for (var i = 0; i < n; i++) {
-                let container = $("<div/>");
-                container.addClass("question-container");
-                container.attr("id","question-container"+i);
-
-                generateInContainer(container);
-
-                container.appendTo($(".display-box"));
-            };
-            
-            $("#showoptions").show();
-            hideOptions();
-
-            e.preventDefault();
-        }
-    </script>
+    <script src="main.js"></script>
 
 </body>
 </html>
