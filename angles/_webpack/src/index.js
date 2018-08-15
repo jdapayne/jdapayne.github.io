@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import {randBetween} from './Utilities.js';
 import Aosl from './Aosl.js';
+import AoslAlgebraic from './AoslAlgebraic.js';
 import drawAosl from './drawAosl.js';
 import './style.css';
 
@@ -19,31 +20,43 @@ $(document).ready(function () {
 // these should probably be moved to modules
 
 function generateInContainer(container) {
-        let canvas = $('<canvas width=300, height=250 class="triangle-view"/>');
+    let canvas = $('<canvas width=300, height=250 class="triangle-view"/>');
 
-        // probabilities - should probably do these as an option argument
-        var p_allrepeated = 0.1;
-        var p_repeated = 0.4;
+    let subtypes = document.querySelectorAll(".subtype:checked");
+    let diceroll = randBetween(0,subtypes.length-1);
 
-        var aosl;
-
-        var diceroll = Math.random()
-        if (diceroll < p_allrepeated) {
-            let n = randBetween(2,4);
-            aosl = Aosl.randomrep(n,n);
-        } else if (diceroll < p_allrepeated + p_repeated) {
-            let n = randBetween(3,4);
-            let m = randBetween(2,n-1);
-            aosl = Aosl.randomrep(n,m);
-        } else {
+    let aosl;
+    switch(subtypes[diceroll].id) {
+        case "simple":{
             let n = randBetween(2,4);
             aosl = Aosl.random(n);
+            break;
         }
+        case "repeated":{
+            if (Math.random() < 0.15) {
+                let n = randBetween(2,5);
+                aosl = Aosl.randomrep(n,n);
+            } else {
+                let n = randBetween(3,4);
+                let m = randBetween(2,n-1);
+                aosl = Aosl.randomrep(n,m);
+            }
+            break;
+        }
+        case "algebra":{
+            let n = randBetween(2,4);
+            aosl = AoslAlgebraic.random(n);
+            break;
+        }
+        default:{
+            throw new Error("This shouldn't happen!!")
+        }
+    }
 
-        drawAosl(aosl,canvas[0]);
-        canvas.appendTo(container);
-        var refresh = $('<p><img src="refresh.png" width=15 height=15 class="refresh"/></p>');
-        refresh.appendTo(container);
+    drawAosl(aosl,canvas[0]);
+    canvas.appendTo(container);
+    var refresh = $('<p><img src="refresh.png" width=15 height=15 class="refresh"/></p>');
+    refresh.appendTo(container);
 }
 
 function hideOptions(e) {

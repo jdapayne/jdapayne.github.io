@@ -1,10 +1,16 @@
 import AoslView from './AoslView.js';
+import AoslViewAlgebraic from './AoslViewAlgebraic.js';
 
 // TODO: This needs splitting into (a) preprosessing the Aosl (rotating, fudging etc) and (b) drawing from the AoslView
 
 export default function drawAosl(aosl,canvas) {
     var ctx = canvas.getContext("2d");
-    var view = new AoslView(aosl,canvas.width/3,50);
+    let view;
+    if (!aosl.expressions) {
+        view = new AoslView(aosl,canvas.width/3,50);
+    } else {
+        view = new AoslViewAlgebraic(aosl,canvas.width/3);
+    }
 
     // transform
     var angle=2*Math.PI*Math.random();

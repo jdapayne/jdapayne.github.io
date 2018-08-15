@@ -1,5 +1,5 @@
-//export default class LinExpr {
-class LinExpr {
+export default class LinExpr {
+//class LinExpr {
     constructor(a,b) {
         this.a = a;
         this.b = b;
