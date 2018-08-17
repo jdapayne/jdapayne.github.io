@@ -2,9 +2,11 @@ import Aosl from './Aosl.js';
 import Point from './Point.js';
 
 export default class AoslView {
-    constructor(aosl,radius) {
+    constructor(aosl,radius,norotate) {
         // aosl :: Aosl
         // radius :: Number 
+        
+        this.aosl = aosl; // worth keeping a link to it
         
         this.O = new Point(0,0);
         this.A = new Point(radius,0);
@@ -27,6 +29,8 @@ export default class AoslView {
             }
             totalangle+=theta;
         }
+
+        if (!norotate) this.randomRotate();
     }
 
     get allpoints () {
@@ -56,6 +60,38 @@ export default class AoslView {
             p.x += x;
             p.y += y
         });
+    }
+
+    randomRotate() {
+        var angle=2*Math.PI*Math.random();
+        this.rotate(angle);
+    }
+
+    // draw
+    drawIn(canvas) {
+        this.translate(canvas.width/2,canvas.height/2); //centre
+
+        var ctx = canvas.getContext("2d");
+
+        ctx.clearRect(0,0,canvas.width,canvas.height); // clear
+
+        ctx.beginPath();
+        ctx.moveTo(this.A.x,this.A.y); // draw lines
+        ctx.lineTo(this.B.x,this.B.y);
+        for (var i=0;i<this.C.length;i++) {
+            ctx.moveTo(this.O.x,this.O.y);
+            ctx.lineTo(this.C[i].x,this.C[i].y);
+        }
+        ctx.stroke();
+
+        ctx.font = "16px Arial",    // draw labels
+        ctx.fillStyle = "Black";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        this.labels.forEach(function(l){
+            ctx.fillText(l.text,l.pos.x,l.pos.y);
+        });
+        ctx.closePath();
     }
 }
 
