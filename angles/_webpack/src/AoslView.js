@@ -7,6 +7,7 @@ export default class AoslView {
         // radius :: Number 
         
         this.aosl = aosl; // worth keeping a link to it
+        this.answered = false;
         
         this.O = new Point(0,0);
         this.A = new Point(radius,0);
@@ -25,7 +26,8 @@ export default class AoslView {
             let theta = aosl.angles[i]
             this.labels[i] = {
                 pos: Point.fromPolarDeg(radius*(0.4+5/theta),totalangle+theta/2),
-                text: aosl.missing[i] == true ? "x°" : aosl.angles[i].toString() + "°"
+                text: aosl.missing[i] == true ? "x°" : aosl.angles[i].toString() + "°",
+                style: "normal"
             }
             totalangle+=theta;
         }
@@ -69,7 +71,7 @@ export default class AoslView {
 
     // draw
     drawIn(canvas) {
-        this.translate(canvas.width/2,canvas.height/2); //centre
+        this.translate(canvas.width/2-this.O.x,canvas.height/2-this.O.y); //centre
 
         var ctx = canvas.getContext("2d");
 
@@ -84,14 +86,49 @@ export default class AoslView {
         }
         ctx.stroke();
 
-        ctx.font = "16px Arial",    // draw labels
-        ctx.fillStyle = "Black";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
+        // labels
         this.labels.forEach(function(l){
-            ctx.fillText(l.text,l.pos.x,l.pos.y);
+            if (!l.hidden) {
+                ctx.font = AoslView.styles.get(l.style).font;
+                ctx.fillStyle = AoslView.styles.get(l.style).colour;
+                ctx.textAlign = AoslView.styles.get(l.style).align;
+                ctx.textBaseline = AoslView.styles.get(l.style).baseline;
+                ctx.fillText(l.text,l.pos.x,l.pos.y);
+            }
         });
         ctx.closePath();
     }
+
+    showAnswer() {
+        if (this.answered) return; //nothing to do
+        this.labels.forEach( (l,i) => {
+            if (this.aosl.missing[i]) {
+                l.text = this.aosl.angles[i].toString() + "°";
+                l.style = "answer";
+            }
+        });
+        return this.answered = true;
+    }
+
+    hideAnswer() {
+        if (!this.answered) return; //nothing to do
+        this.labels.forEach( (l,i) => {
+            if (this.aosl.missing[i]) {
+                l.text = "x°"
+                l.style = "normal";
+            }
+        });
+        return this.answered = false;
+    }
+
+    toggleAnswer() {
+        if (this.answered) return this.hideAnswer();
+        else return this.showAnswer();
+    }
 }
 
+AoslView.styles = new Map([
+    ["normal" , {font: "16px Arial", colour: "Black", align: "center", baseline: "middle"}],
+    ["answer" , {font: "16px Arial", colour: "Red", align: "center", baseline: "middle"}],
+    ["extra-answer", {font: "16px Arial", colour: "Red", align: "left", baseline: "bottom"}]
+]);

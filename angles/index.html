@@ -7,32 +7,43 @@
 </head>
 
 <body>
-    <p><a id="showoptions" href="#">Hide options</a></p>
+<form>
+<header>
+    <div><a id="showoptions" href="#">Hide options</a></div>
     <div id="options">
-        <form>
-        <div class="options-part">
-            <p> Types: <br/>
-            <input type="checkbox" id="aosl" checked disabled/><label for "aosl">Angles on a straight line</label>
-            <input type="checkbox" id="aaap" disabled/><label for "aaap">Angles around a point</label>
-            <input type="checkbox" id="voa" disabled/><label for "voa">Vertically opposite angles</label>
-            <input type="checkbox" id="aiat" disabled/><label for "aiat">Angles in a triangle</label>
-            <input type="checkbox" id="aiaq" disabled/><label for "aiaq">Angles in a quadrilateral</label></p>
-
-            <p> Options: <br/>
-            <input type="checkbox" id="simple" class="subtype" checked/><label for "simple">Simple</label>
-            <input type="checkbox" id="repeated" class="subtype" checked/><label for "repeated">Repeated angles</label>
-            <input type="checkbox" id="algebra" class="subtype" checked/><label for "aosl">Algebraic</label>
-            <input type="checkbox" id="algebra-worded" class="subtype" disabled/><label for "aosl">Algebraic (worded)</label>
-
-            <p>Number of questions:<input type="text" id="n-questions" value="4"></p>
+        <div class="options-row">
+            <div class="options-part">
+                <h2> Types: </h2>
+                <span><label><input type="checkbox" id="aosl" checked disabled/>Angles on a straight line</label></span>
+                <span><label><input type="checkbox" id="aaap" disabled/>Angles around a point</label></span>
+                <span><label><input type="checkbox" id="voa" disabled/>Vertically opposite angles</label></span>
+                <span><label><input type="checkbox" id="aiat" disabled/>Angles in a triangle</label></span>
+                <span><label><input type="checkbox" id="aiaq" disabled/>Angles in a quadrilateral</label></span>
+            </div>
+            <div class="options-part">
+                <h2> Options: </h2>
+                <span><label><input type="checkbox" id="simple" class="subtype" checked/>Simple</label></span>
+                <span><label><input type="checkbox" id="repeated" class="subtype" checked/>Repeated angles</label></span>
+                <span><label><input type="checkbox" id="algebra" class="subtype" checked/>Algebraic</label></span>
+                <span><label><input type="checkbox" id="algebra-worded" class="subtype" disabled/>Algebraic (worded)</label></span>
+            </div>
         </div>
-        <p><button id="generate" type=submit>Go!</button>
-        </form>
+        <div class="options-row">
+            <div class="options-part">
+                Number of questions:<input type="text" id="n-questions" value="4">
+            </div>
+        </div>
     </div>
+    <div id="action-buttons">
+        <button id="generate" type=submit>Generate questions</button>
+        <button id="show-answers" disabled>Show answers</button>
+    </div>
+</header>
+</form>
 
-    <div id="display-box"></div>
+<div id="display-box"></div>
 
-    <script src="main.js"></script>
+<script src="main.js"></script>
 
 </body>
 </html>

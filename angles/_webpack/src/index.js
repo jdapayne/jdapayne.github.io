@@ -25,8 +25,14 @@ App.init = function () {
             let q_container = elem.closest(".question-container");
             let q_index = q_container.dataset.question_index;
             App.generate(q_index);
+        } else if (elem.classList.contains("answer-toggle")) {
+            let q_container = elem.closest(".question-container");
+            let q_index = q_container.dataset.question_index;
+            App.toggleAnswer(q_index,elem);
         }
     });
+
+    document.getElementById("show-answers").addEventListener("click",App.toggleAllAnswers)
 };
 
 App.toggleOptions = function (e) {
@@ -91,6 +97,11 @@ App.generateAll = function () {
         refresh.height = 15;
         container.append(refresh);
 
+        let answer_toggle = document.createElement("div");
+        answer_toggle.innerHTML = "Show answer";
+        answer_toggle.className = "answer-toggle";
+        container.append(answer_toggle);
+
         document.getElementById("display-box").append(container);
 
         App.questions[i] = Object.assign({},App.questions[i], {
@@ -100,6 +111,7 @@ App.generateAll = function () {
         // Make question and question view
         App.generate(i);
     }
+    document.getElementById("show-answers").removeAttribute("disabled");
 };
 
 App.chooseQuestion = function () {
@@ -164,27 +176,48 @@ App.makeView = function (aosl,subtype,radius) {
  * None of these are implemented, however
  */
 
+
+App.toggleAnswer = function (i,e) {
+    let answered = App.questions[i].viewobject.toggleAnswer();
+    App.draw(i);
+    let container = App.questions[i].container;
+    container.classList.toggle("answer");
+    let toggle = container.querySelector(".answer-toggle");
+    if (answered) toggle.innerHTML = "Hide answer";
+    else toggle.innerHTML = "Show answer";
+};
+
 App.showAnswer = function (i) {
     App.questions[i].viewobject.showAnswer();
-    App.redraw(i);
+    App.draw(i);
+    let container = App.questions[i].container;
+    container.classList.add("answer");
+    container.querySelector(".answer-toggle").innerHTML = "Hide answer";
 };
 
-App.hideAnswer = function (i) {
+App.hideAnswer = function (i,e) {
     App.questions[i].viewobject.hideAnswer();
-    App.redraw(i);
+    App.draw(i);
+    let container = App.questions[i].container;
+    container.classList.remove("answer");
+    container.querySelector(".answer-toggle").innerHTML = "Show answer";
 };
 
-App.hideAnswer = function (i) {
-    App.questions[i].viewobject.toggleAnswer();
-    App.redraw(i);
-};
+App.toggleAllAnswers = function (e) {
+    if (!App.answered) {
+        App.questions.forEach( function(q,i) { App.showAnswer(i) });
+        document.getElementById("show-answers").innerHTML = "Hide answers";
+        App.answered = true;
+    } else {
+        App.questions.forEach( function(q,i) { App.hideAnswer(i) });
+        document.getElementById("show-answers").innerHTML = "Show answers";
+        App.answered = false;
+    }
+    if (e) {e.preventDefault()}
+}
 
-App.showAllAnswers = function () {
-    App.questions.forEach( function(q,idx) {
-        q.viewobject.showAnswer();
-        App.redraw(i);
-    });
-};
+
+App.answered = false;
 
 App.questions = []; // An array of Aoslviews? Or maybe a bit more.
 /********************************************************************************************************

@@ -25,6 +25,12 @@ export default class LinExpr {
         return string;
     }
 
+    toStringP() {
+        // return expression as a string, surrounded in parentheses if a binomial
+        if (this.a === 0 || this.b === 0) return this.toString();
+        else return "(" + this.toString() + ")";
+    }
+
     eval(x) {
         return this.a*x + this.b
     }
