@@ -6,7 +6,7 @@ export default class Aosl {
         // missing :: [boolean]
 
         if (angles === []) {throw new Error("argument must not be empty")};
-        if (angles.reduce((x,y) => x+y) !== 180) {throw new Error("Angle sum must be 180")};
+        if (Math.round(angles.reduce((x,y) => x+y)) !== 180) {throw new Error("Angle sum must be 180")};
 
         this.angles = angles;
         this.missing = missing

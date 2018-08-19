@@ -1,29 +1,36 @@
-export default function Point(x,y) {
-    this.x = x;
-    this.y = y;
+export default class Point {
+    constructor (x,y) {
+        this.x = x;
+        this.y = y;
+    }
 
-    this.rotate = function (angle) {
+    rotate (angle) {
         var newx, newy;
         newx = Math.cos(angle)*this.x - Math.sin(angle)*this.y;
         newy = Math.sin(angle)*this.x + Math.cos(angle)*this.y;
         this.x = newx;
         this.y = newy
-    };
+    }
 
-    this.scale = function (sf) {
+    scale (sf) {
         this.x = this.x * sf;
         this.y = this.y * sf;
     }
-}
 
-Point.fromPolar = function (r,theta) {
-    return new Point(
-        Math.cos(theta)*r,
-        Math.sin(theta)*r
-    )
-}
+    translate(x,y) {
+        this.x += x;
+        this.y += y
+    }
 
-Point.fromPolarDeg = function (r,theta) {
-    theta = theta*Math.PI/180;
-    return Point.fromPolar(r,theta)
+    static fromPolar (r,theta) {
+        return new Point(
+            Math.cos(theta)*r,
+            Math.sin(theta)*r
+        )
+    }
+
+    static fromPolarDeg (r,theta) {
+        theta = theta*Math.PI/180;
+        return Point.fromPolar(r,theta)
+    }
 }

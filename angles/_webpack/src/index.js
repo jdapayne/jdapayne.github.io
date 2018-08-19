@@ -3,6 +3,8 @@ import Aosl from './Aosl.js';
 import AoslView from './AoslView.js';
 import AoslAlgebraic from './AoslAlgebraic.js';
 import AoslViewAlgebraic from './AoslViewAlgebraic.js';
+import AoslWorded from './AoslWorded.js';
+import AoslViewWorded from './AoslViewWorded.js';
 import './style.css';
 
 window.addEventListener("DOMContentLoaded", function () {
@@ -55,10 +57,18 @@ App.draw = function (i) {
     view.drawIn(canvas);
 };
 
+App.drawAll = function () {
+    App.questions.forEach( function (q) {
+        let view = q.viewobject;
+        let canvas = q.container.querySelector("canvas");
+        view.drawIn(canvas);
+    });
+}
+
 App.generate = function (i) {
     // Generates a question and represents it at the given index
     let [question,subtype] = App.chooseQuestion();
-    let view = App.makeView(question,subtype,App.defaults.radius);
+    let view = App.makeView(question,subtype);
     
     App.questions[i] = Object.assign({},App.questions[i], {
         viewobject: view,
@@ -72,6 +82,9 @@ App.generate = function (i) {
 App.clear = function () {
     document.getElementById("display-box").innerHTML = "";
     App.questions = []; // cross fingers that no memory leaks occur
+    //dunno if this should go here or somewhere else...
+    document.getElementById("show-answers").removeAttribute("disabled");
+    App.hideAllAnswers();
 };
 
 App.generateAll = function () {
@@ -111,7 +124,6 @@ App.generateAll = function () {
         // Make question and question view
         App.generate(i);
     }
-    document.getElementById("show-answers").removeAttribute("disabled");
 };
 
 App.chooseQuestion = function () {
@@ -144,8 +156,13 @@ App.chooseAosl = function () {
             break;
         }
         case "algebra":{
-            let n = randBetween(2,4);
+            let n = randBetween(2,3);
             aosl = AoslAlgebraic.random(n);
+            break;
+        }
+        case "worded":{
+            //let n = randBetween(2,3)
+            aosl = AoslWorded.random(2);
             break;
         }
         default:{
@@ -155,16 +172,19 @@ App.chooseAosl = function () {
     return [aosl,subtype]
 };
 
-App.makeView = function (aosl,subtype,radius) {
+App.makeView = function (aosl,subtype) {
     // at some point, this needs to branch with different types as well
     let view;
     switch (subtype) {
         case "simple":
         case "repeated":
-            view = new AoslView(aosl,radius);
+            view = new AoslView(aosl,App.defaults.radius,App.defaults.canvas_width,App.defaults.canvas_height);
             break;
         case "algebra":
-            view = new AoslViewAlgebraic(aosl,radius);
+            view = new AoslViewAlgebraic(aosl,App.defaults.radius,App.defaults.canvas_width,App.defaults.canvas_height);
+            break;
+        case "worded":
+            view = new AoslViewWorded(aosl,App.defaults.radius,App.defaults.canvas_width,App.defaults.canvas_height);
             break;
         default:
             throw new Error("No appropriate subtype of question");
@@ -203,19 +223,23 @@ App.hideAnswer = function (i,e) {
     container.querySelector(".answer-toggle").innerHTML = "Show answer";
 };
 
-App.toggleAllAnswers = function (e) {
-    if (!App.answered) {
-        App.questions.forEach( function(q,i) { App.showAnswer(i) });
-        document.getElementById("show-answers").innerHTML = "Hide answers";
-        App.answered = true;
-    } else {
-        App.questions.forEach( function(q,i) { App.hideAnswer(i) });
-        document.getElementById("show-answers").innerHTML = "Show answers";
-        App.answered = false;
-    }
-    if (e) {e.preventDefault()}
+App.hideAllAnswers = function () {
+    App.questions.forEach( function(q,i) { App.hideAnswer(i) });
+    document.getElementById("show-answers").innerHTML = "Show answers";
+    App.answered = false;
 }
 
+App.showAllAnswers = function () {
+    App.questions.forEach( function(q,i) { App.showAnswer(i) });
+    document.getElementById("show-answers").innerHTML = "Hide answers";
+    App.answered = true;
+}
+
+App.toggleAllAnswers = function (e) {
+    if (App.answered) App.hideAllAnswers();
+    else App.showAllAnswers();
+    if (e) {e.preventDefault()}
+}
 
 App.answered = false;
 

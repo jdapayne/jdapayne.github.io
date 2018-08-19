@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/jdapayne/jdapayne.github.io/issues"
   },
-  "homepage": "https://github.com/jdapayne/jdapayne.github.io#readme"
+  "homepage": "https://github.com/jdapayne/jdapayne.github.io#readme",
+  "dependencies": {
+    "fraction.js": "^4.0.9"
+  }
 }

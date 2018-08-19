@@ -12,7 +12,7 @@ body {
     position: relative;
     border: thin solid black;
     margin: 25px;
-    border-radius: 10%;
+    border-radius: 10%
 }
 .question-container.answer {
     border: 5px solid green;
@@ -21,19 +21,19 @@ body {
 .refresh {
     position: absolute;
     left: 10px;
-    top: 10px
+    top: 10px;
+    cursor: pointer
 }
 
 .answer-toggle {
     font-size: small;
     position: absolute;
     right: 10px;
-    top: 10px
+    top: 10px;
+    cursor: pointer
 }
 
 /* Options styling */
-header {
-}
 
 header>div {
     width: 60%;
@@ -82,4 +82,5 @@ label {
     .refresh {display: none !important}
     .question-container {border: none;}
     .answer-toggle {display: none !important}
+    #action-buttons {display: none !important}
 }

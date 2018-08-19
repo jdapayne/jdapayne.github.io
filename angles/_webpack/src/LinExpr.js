@@ -36,7 +36,13 @@ export default class LinExpr {
     }
 
     add(that) {
-        return new LinExpr(this.a+that.a,this.b+that.b)
+        // add either an expression or a constant
+        if (that.a !== undefined) return new LinExpr(this.a+that.a,this.b+that.b);
+        else return new LinExpr(this.a,this.b + that);
+    }
+
+    times(that) {
+        return new LinExpr(this.a * that, this.b * that)
     }
 
     static solve(expr1,expr2) {

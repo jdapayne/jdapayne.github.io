@@ -2,7 +2,7 @@ import Aosl from './Aosl.js';
 import Point from './Point.js';
 
 export default class AoslView {
-    constructor(aosl,radius,norotate) {
+    constructor(aosl,radius,width,height,norotate) {
         // aosl :: Aosl
         // radius :: Number 
         
@@ -32,7 +32,16 @@ export default class AoslView {
             totalangle+=theta;
         }
 
+        /* Labels are objects with:
+         *  pos:: Point
+         *  text:: String
+         *  style:: String
+         *  hidden:: Boolean
+         */
+
         if (!norotate) this.randomRotate();
+
+        this.translate(width/2-this.O.x,height/2-this.O.y); //centre
     }
 
     get allpoints () {
@@ -59,8 +68,7 @@ export default class AoslView {
 
     translate(x,y) {
         this.allpoints.forEach(function(p){
-            p.x += x;
-            p.y += y
+            p.translate(x,y)
         });
     }
 
@@ -71,8 +79,6 @@ export default class AoslView {
 
     // draw
     drawIn(canvas) {
-        this.translate(canvas.width/2-this.O.x,canvas.height/2-this.O.y); //centre
-
         var ctx = canvas.getContext("2d");
 
         ctx.clearRect(0,0,canvas.width,canvas.height); // clear
@@ -130,5 +136,6 @@ export default class AoslView {
 AoslView.styles = new Map([
     ["normal" , {font: "16px Arial", colour: "Black", align: "center", baseline: "middle"}],
     ["answer" , {font: "16px Arial", colour: "Red", align: "center", baseline: "middle"}],
-    ["extra-answer", {font: "16px Arial", colour: "Red", align: "left", baseline: "bottom"}]
+    ["extra-answer", {font: "16px Arial", colour: "Red", align: "left", baseline: "bottom"}],
+    ["extra-info", {font: "12px Arial", colour: "Black", align: "left", baseline: "bottom"}]
 ]);

@@ -24,6 +24,7 @@ export default class AoslAlgebraic extends Aosl{
 
         super(angles,missing);
         this.expressions = expressions;
+        this.solution = x;
     }
 
     static random(n,options) {
@@ -59,16 +60,14 @@ export default class AoslAlgebraic extends Aosl{
             angles.push(a*x+b);
         }
 
-        let lastexpression;
-        if (allconstant) {
-            let a = randBetween(1,Math.min(settings.max_x_coeff,Math.floor(left/x)));
-            let b = left-a*x;
-            lastexpression = new LinExpr(a,b);
-        } else {
-            lastexpression = new LinExpr(0,left);
-        }
+        let last_min_x_coeff = allconstant? 1 : settings.min_x_coeff;
+        //let a = randBetween(last_min_x_coeff,Math.min(settings.max_x_coeff,Math.floor(left/x)));
+        let a = randBetween(last_min_x_coeff,settings.max_x_coeff);
+        let b = left-a*x;
+        let lastexpression = new LinExpr(a,b);
         expressions.splice(randBetween(0,n-1),0,lastexpression);
 
+        console.log(lastexpression.toString());
         //console.log(`x = ${x}, expressions = ${expressions.map((e) => e.toString())}, angles = ${angles}`);
 
         return new AoslAlgebraic(expressions); 

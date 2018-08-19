@@ -1,23 +1,24 @@
-import AoslAlgebraic from './AoslAlgebraic.js';
 import AoslView from './AoslView.js';
 import Point from './Point.js';
 
-export default class AoslViewAlgebraic extends AoslView{
+export default class AoslViewWorded extends AoslView{
     constructor(aosl, radius, width, height) {
         super(aosl,radius, width, height);
 
-        this.labels.forEach(function(l,idx) {
-            l.text = aosl.expressions[idx].toStringP() + "°";
+        this.labels.forEach(function(l,i) {
+            l.text = String.fromCharCode(65+i);
         });
 
-        this.labels.push(
-            {
-                text: "x = " + aosl.solution,
-                pos: new Point(10, height - 10),
-                style: "extra-answer",
-                hidden: true
-            }
-        )
+        this.aosl.instructions.forEach( (instruction, i) => {
+            this.labels.push(
+                {
+                    text: instruction,
+                    pos: new Point(10, height - 10 - 15*i), //this is not idea - assumes fixed font height
+                    style: "extra-info",
+                    hidden: false
+                }
+            )
+        });
     }
 
     showAnswer() {
@@ -26,7 +27,6 @@ export default class AoslViewAlgebraic extends AoslView{
             this.labels[i].text = this.aosl.angles[i].toString() + "°";
             this.labels[i].style = "answer";
         }
-        this.labels[this.labels.length - 1].hidden = false;
 
         return this.answered = true;
     }
@@ -34,10 +34,10 @@ export default class AoslViewAlgebraic extends AoslView{
     hideAnswer() {
         if (!this.answered) return; //nothing to do
         for (let i=0; i<this.labels.length-1; i++) {
-            this.labels[i].text = this.aosl.expressions[i].toStringP() + "°";
+            this.labels[i].text = String.fromCharCode(65+i);
             this.labels[i].style = "normal";
         }
-        this.labels[this.labels.length - 1].hidden = true;
+
         return this.answered = false;
     }
 }
