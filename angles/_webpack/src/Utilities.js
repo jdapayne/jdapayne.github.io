@@ -14,3 +14,7 @@ export function randMultBetween(min,max,n) {
 export function roundToTen (n) {
     return Math.round(n/10)*10;
 }
+
+export function roundDP (x,n) {
+    return Math.round(x*10**n)/(10**n);
+}

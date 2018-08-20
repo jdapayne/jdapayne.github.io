@@ -15,8 +15,8 @@ export default function App () {}
 
 App.init = function () {
     document.getElementById("generate").addEventListener("click", function(e) {
-        App.generateAll();
         e.preventDefault();
+        App.generateAll();
     });
 
     document.getElementById("showoptions").addEventListener("click",App.toggleOptions);
@@ -135,6 +135,7 @@ App.chooseAosl = function () {
     // choose a type of question and generate it
     // return both the (sub)type and the question
     let selected_subtypes = document.querySelectorAll(".subtype:checked");
+    if (selected_subtypes.length === 0) throw "no_subtype";
     let diceroll = randBetween(0,selected_subtypes.length-1);
     let subtype = selected_subtypes[diceroll].id;
     let aosl;
@@ -161,8 +162,8 @@ App.chooseAosl = function () {
             break;
         }
         case "worded":{
-            //let n = randBetween(2,3)
-            aosl = AoslWorded.random(2);
+            let n = randBetween(2,3)
+            aosl = AoslWorded.random(n);
             break;
         }
         default:{
