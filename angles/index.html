@@ -14,23 +14,60 @@
         <div class="options-row">
             <div class="options-part">
                 <h2> Types: </h2>
-                <span><label><input type="checkbox" id="aosl" checked disabled/>Angles on a straight line</label></span>
-                <span><label><input type="checkbox" id="aaap" disabled/>Angles around a point</label></span>
-                <span><label><input type="checkbox" id="voa" disabled/>Vertically opposite angles</label></span>
-                <span><label><input type="checkbox" id="aiat" disabled/>Angles in a triangle</label></span>
-                <span><label><input type="checkbox" id="aiaq" disabled/>Angles in a quadrilateral</label></span>
+                <ul class="options-list">
+                    <li><label><input type="checkbox" id="aosl" class="type" checked/>Angles on a straight line</label></li>
+                    <li><label><input type="checkbox" id="aaap" class="type" />Angles around a point</label></li>
+                    <li><label><input type="checkbox" id="triangle" class="type"/>Angles in a triangle</label></li>
+                </ul>
             </div>
             <div class="options-part">
                 <h2> Options: </h2>
-                <span><label><input type="checkbox" id="simple" class="subtype" checked/>Simple</label></span>
-                <span><label><input type="checkbox" id="repeated" class="subtype" />Repeated angles</label></span>
-                <span><label><input type="checkbox" id="algebra" class="subtype" />Algebraic</label></span>
-                <span><label><input type="checkbox" id="worded" class="subtype"/>Worded</label></span>
+                <ul class="options-list" id="options-advanced">
+                    <li><label><input type="checkbox" id="simple" class="subtype" checked/>Simple</label></li>
+                    <li><label><input type="checkbox" id="repeated" class="subtype" />Repeated angles</label></li>
+                    <li><label><input type="checkbox" id="algebra" class="subtype" />Algebraic</label></li>
+                    <li><label><input type="checkbox" id="worded" class="subtype"/>Worded</label>
+                        <ul>
+                            <li><label><input type="checkbox" id="worded-percent" class="subtype"/>Include percentages</label></li>
+                            <li><label><input type="checkbox" id="worded-ratio" class="subtype"/>Include ratios</label></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="options-list" id="options-simple">
+                    <li>Lowest difficulty:
+                        <select id="mindiff">
+                            <option selected>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                        </select>
+                    </li>
+                    <li>Highest difficulty:
+                        <select id="maxdiff">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option selected>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                        </select>
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="options-row">
             <div class="options-part">
-                Number of questions:<input type="text" id="n-questions" value="10">
+                Number of questions:<input type="number" min="1" id="n-questions" value="10"/> 
             </div>
         </div>
     </div>
@@ -41,8 +78,36 @@
 </header>
 </form>
 
+<div id="zoom">
+    Zoom: <span id="zoomin">+</span> / <span id="zoomout">-</span>
+</div>
+
+<div id="modal-overlay">
+    <div class="modal">
+        <h1> Angles on a straight line <input type="checkbox"></h1>
+        <ul>
+            <li><label>Simple <input type="checkbox"></label>
+                <ul>
+                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
+                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
+                </ul>
+            <li><label>Simple <input type="checkbox"></label>
+                <ul>
+                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
+                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
+                </ul>
+            <li><label>Simple <input type="checkbox"></label>
+                <ul>
+                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
+                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
+                </ul>
+        </ul>
+    </div>
+</div>
+
 <div id="display-box"></div>
 
+<!-- Full source code available at https://github.com/jdapayne/angles -->
 <script src="main.js"></script>
 
 </body>
