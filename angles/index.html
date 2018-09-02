@@ -4,6 +4,10 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@DrPMaths" />
+    <meta name="twitter:title" content="Random angle question generator" />
+    <meta name="twitter:image" content="https://jdapayne/github.io/angles/twitter_preview.jpg" />
     <title>Angle generator</title>
     <link rel="stylesheet" href="style.css" type="text/css" media="all" charset="utf-8">
 </head>
@@ -17,27 +21,41 @@
             <div class="options-part">
                 <h2> Types: </h2>
                 <ul class="options-list">
-                    <li><label><input type="checkbox" id="aosl" class="type" checked/>Angles on a straight line</label></li>
-                    <li><label><input type="checkbox" id="aaap" class="type" />Angles around a point</label></li>
-                    <li><label><input type="checkbox" id="triangle" class="type"/>Angles in a triangle</label></li>
+                    <li><label><input type="checkbox" value="aosl" data-setting="types[]" class="option" checked/>Angles on a straight line</label></li>
+                    <li><label><input type="checkbox" value="aaap" data-setting="types[]" class="option"/>Angles around a point</label></li>
+                    <li><label><input type="checkbox" value="triangle" data-setting="types[]" class="option"/>Angles in a triangle</label></li>
                 </ul>
             </div>
             <div class="options-part">
                 <h2> Options: </h2>
-                <ul class="options-list" id="options-advanced">
-                    <li><label><input type="checkbox" id="simple" class="subtype" checked/>Simple</label></li>
-                    <li><label><input type="checkbox" id="repeated" class="subtype" />Repeated angles</label></li>
-                    <li><label><input type="checkbox" id="algebra" class="subtype" />Algebraic</label></li>
-                    <li><label><input type="checkbox" id="worded" class="subtype"/>Worded</label>
-                        <ul>
-                            <li><label><input type="checkbox" id="worded-percent" class="subtype"/>Include percentages</label></li>
-                            <li><label><input type="checkbox" id="worded-ratio" class="subtype"/>Include ratios</label></li>
-                        </ul>
+                <label><input type="radio" value="basic" name="options-type" data-setting="options_mode" class="option" checked/>By difficulty</label>
+                <label><input type="radio" value="advanced" name="options-type" data-setting="options_mode" class="option"/>Custom</label>
+
+                <div class="hidden" id="options-advanced">
+                <ul class="options-list">
+                    <li>
+                        <label><input type="checkbox" value="simple" data-setting="subtypes[]" class="option" checked/>Simple</label>
+                        <a href="#" data-modal="simple-options">(Options)</a>
+                    <class="option"/li>
+                    <li>
+                        <label><input type="checkbox" value="repeated" data-setting="subtypes[]" class="option"/>Repeated angles/Isosceles</label>
+                        <a href="#" data-modal="repeated-options">(Options)</a>
+                    <class="option"/li>
+                    <li>
+                        <label><input type="checkbox" value="algebra" data-setting="subtypes[]" class="option"/>Algebraic</label>
+                        <a href="#" data-modal="algebraic-options">(Options)</a>
+                    <class="option"/li>
+                    <li>
+                        <label><input type="checkbox" value="worded" data-setting="subtypes[]" class="option"/>Worded</label>
+                        <a href="#" data-modal="worded-options">(Options)</a>
                     </li>
                 </ul>
-                <ul class="options-list" id="options-simple">
+                </div>
+
+                <div id="options-simple">
+                <ul class="options-list">
                     <li>Lowest difficulty:
-                        <select id="mindiff">
+                        <select data-setting="mindiff" class="option">
                             <option selected>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -51,7 +69,7 @@
                         </select>
                     </li>
                     <li>Highest difficulty:
-                        <select id="maxdiff">
+                        <select data-setting="maxdiff" class="option">
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -65,11 +83,13 @@
                         </select>
                     </li>
                 </ul>
+                <a class="options-modal" href="#" data-modal="difficulty-info">?</a>
+                </div>
             </div>
         </div>
         <div class="options-row">
             <div class="options-part">
-                Number of questions:<input type="number" min="1" id="n-questions" value="10"/> 
+                Number of questions:<input type="number" min="1" class="option" data-setting="n_questions" value="10"/> 
             </div>
         </div>
     </div>
@@ -84,30 +104,86 @@
     Zoom: <span id="zoomin">+</span> / <span id="zoomout">-</span>
 </div>
 
-<div id="modal-overlay">
-    <div class="modal">
-        <h1> Angles on a straight line <input type="checkbox"></h1>
-        <ul>
-            <li><label>Simple <input type="checkbox"></label>
-                <ul>
-                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
-                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
-                </ul>
-            <li><label>Simple <input type="checkbox"></label>
-                <ul>
-                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
-                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
-                </ul>
-            <li><label>Simple <input type="checkbox"></label>
-                <ul>
-                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
-                    <li><input type="text">&leq;Number of angles&leq;<input type="text"></li>
-                </ul>
-        </ul>
-    </div>
-</div>
 
 <div id="display-box"></div>
+
+<div id="modal-overlay" class="hidden"></div>
+
+<div class="modal" id="fulloptions"></div>
+
+<div class="modal" id="difficulty-info">
+    <h2> Difficulty:</h2>
+    <ol>
+        <li>Two angles, one missing</li>
+        <li>Three or four angles, one missing</li>
+        <li>Repeated angles</li>
+        <li>Algebraic (all monomials - 1 step eq)</li>
+        <li>Algebraic (two step equation)</li>
+        <li>Algebraic (Arbitrary linear expressions)</li>
+        <li>Worded</li>
+        <li>Worded</li>
+        <li>Worded (including ratio)</li>
+        <li>Worded (including ratio and percentages)</li>
+    </ol>
+</div>
+
+<div class="modal" id="simple-options">
+    <h2>Simple (one angle missing)</h2>
+    <ul class="options-list">
+        <li> <input type="number" class="option" data-setting="simple.min_n"> &leq; No. of angles &leq;
+            <input type="number" class="option" data-setting="simple.max_n">
+        </li>
+    </ul>
+</div>
+
+<div class="modal" id="repeated-options">
+    <h2>Repeated (multiple equal angles missing)</h2>
+    <ul class="options-list">
+        <li> <input type="number" class="option" data-setting="repeated.min_n"> &leq; No. of angles &leq;
+            <input type="number" class="option" data-setting="repeated.max_n">
+        </li>
+        <li> <input type="number" class="option" data-setting="repeated.min_repeated"> &leq; No. or repeated angles &leq;
+            <input type="number" class="option" data-setting="repeated.max_repeated">
+        </li>
+    </ul>
+</div>
+
+<div class="modal" id="algebraic-options">
+    <h2> Algebraic </h2>
+    <ul class="options-list">
+        <li> <input type="number" class="option" data-setting="algebra.min_n"> &leq; No. of angles &leq;
+            <input type="number" class="option" data-setting="algebra.max_n">
+        </li>
+        <li> &bull; Types of question:
+            <ul>
+                <li><label> <input type="checkbox" class="option" data-setting="algebra.types[]" value="add">x+a only</label></li>
+                <li><label><input type="checkbox" class="option" data-setting="algebra.types[]" value="mult">ax only</label></li>
+                <li><label><input type="checkbox" class="option" data-setting="algebra.types[]" value="mixed">Mixed expressions</label></li>
+            </ul>
+        <li> <input type="checkbox" class="option" data-setting="algebra.ensure_x" value="true">Ensure one angle is x</li>
+        <li> <input type="checkbox" class="option" data-setting="algebra.constants" value="true">Ensure one angle is constant</li>
+    </ul>
+</div>
+
+<div class="modal" id="worded-options">
+    <h2> Worded questions </h2>
+    <ul class="options-list">
+        <li> <input type="number" class="option" data-setting="worded.min_n"> &leq; No. of angles &leq;
+            <input type="number" class="option" data-setting="worded.max_n">
+        </li>
+        <li> &bull; Types (all can appear in one question)
+            <ul>
+                <li><label> <input type="checkbox" class="option" data-setting="worded.types[]" value="add">More than/less than</label></li>
+                <li><label><input type="checkbox" class="option" data-setting="worded.types[]" value="multiply">Multiples</label></li>
+                <li><label><input type="checkbox" class="option" data-setting="worded.types[]" value="ratio">Ratio</label></li>
+                <li><label><input type="checkbox" class="option" data-setting="worded.types[]" value="percent">Percentage increase/decrease</label></li>
+            </ul>
+    </ul>
+</div>
+
+<div class="modal" id="default-modal">
+    Test
+</div>
 
 <!-- Full source code available at https://github.com/jdapayne/angles -->
 <script src="main.js"></script>

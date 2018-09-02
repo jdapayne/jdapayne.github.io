@@ -2,7 +2,7 @@ body {
     font-family: Arial
 }
 
-/* Questions styling */
+/* {{{ Questions styling */
 #display-box {
     display:flex;
     flex-flow: row wrap;
@@ -32,14 +32,9 @@ body {
     top: 10px;
     cursor: pointer
 }
+/*}}}*/
 
-/* Options styling */
-
-/*header>div {*/
-    /*width: 60%;*/
-    /*margin: auto*/
-/*}*/
-
+/* Options styling {{{*/
 header {
     width: 60%;
     margin: auto
@@ -64,24 +59,34 @@ header {
 }
 
 .options-part h2 {
+    display: inline-block;
     font-size: medium;
     margin-top: 0;
-    margin-bottom: 0.5em
+    margin-bottom: 0.5em;
+    margin-right: 1em
 }
 
-.options-part ul {
+.options-part a {
+    float: right
+}
+
+.options-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.options-part ul ul {
-    padding-left: 1em;
-    font-size: smaller
+.options-list li {
+    padding-top: 0.5em
 }
 
-#options-advanced {
-    display: none
+.options-list ul {
+    list-style: none;
+    padding-left: 1em;
+}
+
+.options-list ul li {
+    padding-top: 0.1em
 }
 
 #action-buttons {
@@ -92,11 +97,18 @@ label {
     white-space: nowrap
 }
 
-.hidden {
-    display: none !important
+.options-modal{
+    float: right;
 }
 
-/* Zoom buttons */
+input[type="number"]{
+    width: 3em;
+    text-align: center
+}
+
+/*}}}*/
+
+/* Zoom buttons {{{*/
 #zoom {
     position: absolute;
     top: 1em;
@@ -107,9 +119,9 @@ label {
     font-size: large;
     cursor: pointer
 }
+/*}}}*/
 
-/* Modal dialog */
-
+/* Modal dialog {{{*/
 #modal-overlay {
     background: rgba(255,255,255,0.7);
     position: absolute;
@@ -117,28 +129,39 @@ label {
     left: 0;
     width: 100%;
     height: 100%;
-    /*display: flex;*/
-    display:none
+    display: flex
+}
+
+#modal-overlay div.modal {
+    display: block;
 }
 
 .modal {
     margin: auto;
     background: rgba(255,255,255,1);
-    border: black solid thin;
-    border-radius: 10px;
-    padding: 30px
+    border: black solid thick;
+    padding: 15px;
+    display: none;
+}
+/*}}}*/
+
+.hidden {
+    display: none !important
 }
 
-
+/*Printing{{{*/
 @media only print {
     #showoptions {display: none !important}
     #options {display: none !important}
     .refresh {display: none !important}
-    .question-container {border: none;}
+    .question-container {border: none; margin: 0.2em}
     .answer-toggle {display: none !important}
     #action-buttons {display: none !important}
+    #zoom {display: none !important}
 }
+/*}}}*/
 
+/*Mobile styling {{{*/
 @media only screen and (max-width: 750px) {
     body {
         font-size: 0.8em
@@ -160,3 +183,4 @@ label {
         margin-top: 25px
     }
 }
+/*}}}*/
