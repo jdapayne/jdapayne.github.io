@@ -201,6 +201,7 @@ function drawTriangle(triangle,canvas,options) {
         ctx.moveTo(view.B.x,view.B.y);
         ctx.lineTo(view.ht.x,view.ht.y);
         ctx.stroke();
+        ctx.closePath();
     }
     if (overhangleft) {
         ctx.beginPath();
@@ -208,6 +209,7 @@ function drawTriangle(triangle,canvas,options) {
         ctx.moveTo(view.A.x,view.A.y);
         ctx.lineTo(view.ht.x,view.ht.y);
         ctx.stroke();
+        ctx.closePath()
     }
 
     // debug
