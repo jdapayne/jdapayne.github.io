@@ -16,7 +16,7 @@
   <meta name="twitter:site" content="@DrPMaths" />
   <meta name="twitter:title" content="Random angle question generator" />
   <meta name="twitter:image" content="https://jdapayne.github.io/angles/twitter_preview.jpg" />
-  <title>Angle generator</title>
+  <title>Area and perimeter</title>
   <link rel="stylesheet" href="style.css" type="text/css" media="all">
 </head>
 
@@ -33,21 +33,71 @@
         </ul>
       </div>
       <div class="options-part">
-        <h2> Question types: </h2>
-        <ul class="options-list">
-          <li>
-            <label><input type="checkbox" value="area" data-setting="types[]" class="option" checked/>Area</label>
-          </li>
-          <li>
-            <label><input type="checkbox" value="perimeter" data-setting="types[]" class="option"/>Perimeter</label>
-          </li>
-          <li>
-            <label><input type="checkbox" value="rev-area" data-setting="types[]" class="option"/>Reverse area</label>
-          </li>
-          <li>
-            <label><input type="checkbox" value="rev-perimeter" data-setting="types[]" class="option"/>Reverse perimeter</label>
-          </li>
-        </ul>
+        <h2> Options: </h2>
+          <label><input type="radio" value="basic" name="options-type" data-setting="options_mode" class="option" checked/>By difficulty</label>
+          <label><input type="radio" value="advanced" name="options-type" data-setting="options_mode" class="option"/>Custom</label>
+
+        <div class="hidden" id="options-advanced">
+          <ul class="options-list">
+            <li>
+              <label><input type="checkbox" value="area" data-setting="types[]" class="option" checked/>Area</label>
+            </li>
+            <li>
+              <label><input type="checkbox" value="perimeter" data-setting="types[]" class="option"/>Perimeter</label>
+            </li>
+            <li>
+              <label><input type="checkbox" value="rev-area" data-setting="types[]" class="option"/>Reverse area</label>
+            </li>
+            <li>
+              <label><input type="checkbox" value="rev-perimeter" data-setting="types[]" class="option"/>Reverse perimeter</label>
+            </li>
+            <li>
+              <label><input type="checkbox" value="pythag-area" data-setting="types[]" class="option"/>Area using Pythagoras (right-angled)</label>
+            </li>
+            <li>
+              <label><input type="checkbox" value="iso-pythag-area" data-setting="types[]" class="option"/>Area using Pythagoras (isosceles)</label>
+            </li>
+          </ul>
+        </div>
+
+        <div id="options-simple">
+          <ul class="options-list">
+            <li>
+              <label><input type="checkbox" value="area" data-setting="simple_types[]" class="option"/>Area</label>
+              <label><input type="checkbox" value="perimeter" data-setting="simple_types[]" class="option"/>Perimeter</label>
+            </li>
+            <li>Lowest difficulty:
+                <select data-setting="mindiff" class="option">
+                    <option selected>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </li>
+            <li>
+                Highest difficulty:
+                <select data-setting="maxdiff" class="option">
+                    <option selected>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </li>
+          </ul>
+        </div>
+
       </div>
     </div>
     <div class="options-row">
