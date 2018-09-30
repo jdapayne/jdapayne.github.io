@@ -29,7 +29,7 @@
 
     <div class="options-row">
       <div class="options-part">
-        <h2> Number types: </h2>
+        <h2> Options: </h2>
         <ul class="options-list">
           <li>
             <input type="number" data-setting="options.min" class="option"/> &leq; Vertex numbers &leq;
@@ -41,6 +41,10 @@
           <li>
             Difficulty: <input type="number" min="1" max="3" data-setting="options.diff" class="option"/>
           </li>
+          <li>
+            Operation:
+            <label><input type="radio" value="add" name="op" data-setting="options.op" class="option" checked/>Add</label>
+            <label><input type="radio" value="multiply" name="op" data-setting="options.op" class="option" checked/>Multiply</label>
         </ul>
       </div>
     </div>
