@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-124339741-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-124339741-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@DrPMaths" />
+  <meta name="twitter:title" content="Random angle question generator" />
+  <meta name="twitter:image" content="https://jdapayne.github.io/angles/twitter_preview.jpg" />
+  <title>Integer Arithmagons</title>
+  <link rel="stylesheet" href="style.css" type="text/css" media="all">
+</head>
+
+<body>
+<form>
+<header>
+  <div><a id="showoptions" href="#">Hide options</a></div>
+
+  <div id="options">
+
+    <div class="options-row">
+      <div class="options-part">
+        <h2> Number types: </h2>
+        <ul class="options-list">
+          <li>
+            <input type="number" data-setting="options.min" class="option"/> &leq; Vertex numbers &leq;
+            <input type="number" data-setting="options.max" class="option"/>
+          </li>
+          <li>
+            Number of vertices: <input type="number" data-setting="options.n" class="option"/>
+          </li>
+          <li>
+            Difficulty: <input type="number" min="1" max="3" data-setting="options.diff" class="option"/>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="options-row">
+      <div class="options-part">
+        Number of questions:<input type="number" min="1" class="option" data-setting="n_questions" value="10"/> 
+      </div>
+    </div>
+
+  </div>
+
+  <div id="action-buttons">
+    <button id="generate" type=submit>Generate questions</button>
+    <button id="show-answers" disabled>Show answers</button>
+  </div>
+
+</header>
+</form>
+
+<div id="zoom">
+  Zoom: <span id="zoomin">+</span> / <span id="zoomout">-</span>
+</div>
+
+<div id="display-box"></div>
+
+<div id="modal-overlay" class="hidden"></div>
+
+<div class="modal" id="default-modal">
+  Test
+</div>
+
+<!-- Full source code available at https://github.com/jdapayne/arithmagons -->
+<script src="main.js"></script>
+
+</body>
+</html>
