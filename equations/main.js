@@ -14,6 +14,12 @@ var answered = false;
 function generateAll() {
   document.getElementById("display-box").innerHTML="";
   questions = [];
+
+  var mainq = document.createElement("p");
+  mainq.className = "katex mainq";
+  mainq.innerHTML = "1. Find the equation of the line betwen the two points:";
+  document.getElementById("display-box").appendChild(mainq);
+
   var n = parseInt(document.getElementById("n_questions").value);
   var mindiff = parseInt(document.getElementById("min_diff").value);
   var maxdiff = parseInt(document.getElementById("max_diff").value);
@@ -24,7 +30,7 @@ function generateAll() {
     container.className = "question-container";
     container.dataset.question_index = i;
 
-    document.getElementById("display-box").append(container);
+    document.getElementById("display-box").appendChild(container);
 
     questions[i] = Object.assign({},questions[i], {
       container: container
@@ -42,7 +48,6 @@ function generate(i,difficulty) {
   questions[i].question = question;
 
   var questionp = document.createElement("p");
-  var questionspan = document.createElement("span");
   var answerp = document.createElement("p");
   var container = questions[i].container;
 
@@ -50,11 +55,10 @@ function generate(i,difficulty) {
   answerp.className = "answer";
   answerp.classList.add("hidden");
 
-  questionp.innerHTML = String.fromCharCode(65 + (32+i)%58) + ")&nbsp;&nbsp;";
-  katex.render(question.q, questionspan);
+  var qnum = "\\text{" + String.fromCharCode(65 + (32+i)%58) + ") }";
+  katex.render(qnum + question.q, questionp);
   katex.render(question.a, answerp);
 
-  questionp.appendChild(questionspan);
   container.appendChild(questionp);
   container.appendChild(answerp);
 }
