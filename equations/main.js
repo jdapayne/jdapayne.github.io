@@ -50,7 +50,7 @@ function generate(i,difficulty) {
   answerp.className = "answer";
   answerp.classList.add("hidden");
 
-  questionp.innerHTML = String.fromCharCode(65 + (32+i)%58) + ")  ";
+  questionp.innerHTML = String.fromCharCode(65 + (32+i)%58) + ")&nbsp;&nbsp;";
   katex.render(question.q, questionspan);
   katex.render(question.a, answerp);
 
