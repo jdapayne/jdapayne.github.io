@@ -8,6 +8,8 @@ document.getElementById("show-answers").addEventListener("click", function(e) {
     toggleAnswers();
   });
 
+document.getElementById("showoptions").addEventListener("click", toggleOptions);
+
 var questions = [];
 var answered = false;
 
@@ -17,7 +19,7 @@ function generateAll() {
 
   var mainq = document.createElement("p");
   mainq.className = "katex mainq";
-  mainq.innerHTML = "1. Find the equation of the line betwen the two points:";
+  mainq.innerHTML = "1. Find the equation of the line between the two points:";
   document.getElementById("display-box").appendChild(mainq);
 
   var n = parseInt(document.getElementById("n_questions").value);
@@ -141,3 +143,15 @@ function toggleAnswers(e) {
   }
 }
 
+function toggleOptions (e) {
+  var showoptions = document.getElementById("showoptions");
+  var is_hidden = document.getElementById("options").classList.toggle("hidden");
+
+  if (is_hidden) {
+    showoptions.innerHTML = "Show options";
+  } else {
+    showoptions.innerHTML = "Hide options";
+  }
+
+  if (e) {e.preventDefault();}
+};
