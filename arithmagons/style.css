@@ -211,6 +211,7 @@ input[type="range"]{
     .answer-toggle {display: none !important}
     #action-buttons {display: none !important}
     #zoom {display: none !important}
+    #back {display: none !important}
 }
 /*}}}*/
 
