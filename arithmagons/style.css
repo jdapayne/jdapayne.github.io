@@ -1,6 +1,13 @@
 body {
     font-family: Arial
 }
+#back {
+  font-size:small;
+  position: absolute;
+  left: 0.5em;
+  top: 0.5em
+}
+
 
 /* {{{ Questions styling */
 #display-box {
@@ -12,7 +19,7 @@ body {
     position: relative;
     border: thin solid black;
     margin: 15px;
-    border-radius: 10%
+    border-radius: 10px
 }
 .question-container.answer {
     border: 5px solid green;
@@ -24,6 +31,9 @@ body {
     top: 10px;
     cursor: pointer
 }
+.question-view {
+    display: block;
+}
 
 .answer-toggle {
     font-size: small;
@@ -32,6 +42,44 @@ body {
     top: 10px;
     cursor: pointer
 }
+
+/* labels */
+.label {
+  position: absolute;
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  justify-content:center;
+  flex-direction:column;
+  text-align: center;
+}
+.label.answer {
+  color: red;
+}
+.label.extra-answer {
+  color: red;
+  transform: translateY(-50%);
+}
+.label.extra-info {
+  transform: translateY(-50%);
+}
+.label.side {
+  min-width: 35px;
+  min-height: 35px;
+  border: thin solid black;
+  background: white;
+}
+.label.vertex {
+  border-radius: 50%;
+  min-width: 50px;
+  min-height: 50px;
+  border: thin solid black;
+  background: white;
+}
+.label>div {
+    margin: 8px;
+}
+
+
 /*}}}*/
 
 /* Options styling {{{*/
@@ -106,6 +154,11 @@ input[type="number"]{
     text-align: center
 }
 
+input[type="range"]{
+  width: 4em;
+}
+
+
 /*}}}*/
 
 /* Zoom buttons {{{*/
@@ -165,6 +218,9 @@ input[type="number"]{
 @media only screen and (max-width: 750px) {
     body {
         font-size: 0.8em
+    }
+    #back {
+      position: static
     }
     header {
         width: 100%
