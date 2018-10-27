@@ -26,12 +26,12 @@
   <meta name="twitter:site" content="@DrPMaths" />
   <meta name="twitter:title" content="Arithmagon generator" />
   <meta name="twitter:image" content="https://jdapayne.github.io/arithmagons/twitter_preview.jpg" />
-  <meta name="twitter:description" content="Random arithmagon generator. Includes customisation options, increasing difficulty and generates integers or fractions. Addition or multiplication."/>
+  <meta name="twitter:description" content="Random arithmagon generator. Features include: Integers, fractions and algebraic expressions; addition and subtraction options; collecting like terms; expanding brackets; increasing difficulty"/>
 
-  <meta name="description" content="Random arithmagon question generator. Includes customisation options, increasing difficulty and generates integers or fractions. Addition or multiplication."/>
-  <meta name="keywords" content="maths,arithmagons,integers,fractions,question generator"/>
+  <meta name="description" content="Random arithmagon generator. Features include: Integers, fractions and algebraic expressions; addition and subtraction options; collecting like terms; expanding brackets; increasing difficulty"/>
+  <meta name="keywords" content="maths,arithmagons,integers,fractions,question generator,expanding brackets,collecting like terms"/>
 
-  <title>Integer Arithmagons</title>
+  <title>Arithmagon generator</title>
   <link rel="stylesheet" href="style.css" type="text/css" media="all">
 </head>
 
@@ -44,63 +44,87 @@
   <div id="options">
 
     <div class="options-row">
-
       <div class="options-part">
-        <h2>Number options:</h2>
+        <h2>Type:</h2>
         <ul class="options-list">
-          <li>
-            <label><input type="radio" value="integer" name="type" data-setting="options.type" class="option" checked/>Integers</label>
-              <input type="number" data-setting="options.min" class="option"/>
-              &leq; number &leq;
-              <input type="number" data-setting="options.max" class="option"/>
+          <li>Integers:
+            <label>
+              <input type="radio" value="integer-add" name="type" data-setting="options.type" class="option"/>
+              Add
+            </label>
+            <label>
+              <input type="radio" value="integer-multiply" name="type" data-setting="options.type" class="option"/>
+              Multiply
+            </label>
           </li>
+
+          <li>Fractions:
+            <label>
+              <input type="radio" value="fraction-add" name="type" data-setting="options.type" class="option"/>
+              Add
+            </label>
+            <label>
+              <input type="radio" value="fraction-multiply" name="type" data-setting="options.type" class="option"/>
+              Multiply
+            </label>
           </li>
-          <li>
-            <label><input type="radio" value="fraction" name="type" data-setting="options.type" class="option" checked/>Fractions: </label>
-                <select data-setting="mindiff" class="option">
-                    <option selected>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                </select>
-                &nbsp;&leq; difficulty &leq;&nbsp;
-                <select data-setting="maxdiff" class="option">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                </select>
+
+          <li>Algebra:
+            <label>
+              <input type="radio" value="algebra-add" name="type" data-setting="options.type" class="option"/>
+              Add
+            </label>
+            <label>
+              <input type="radio" value="algebra-multiply" name="type" data-setting="options.type" class="option"/>
+              Multiply
+            </label>
           </li>
         </ul>
       </div>
 
       <div class="options-part">
-        <h2>Arithmagon options:</h2>
+        <h2>Options:</h2>
         <ul class="options-list">
-          <li> Operation:
-            <label><input type="radio" value="add" name="op" data-setting="options.op" class="option" checked/>Add</label>
-            <label><input type="radio" value="multiply" name="op" data-setting="options.op" class="option" checked/>Multiply</label>
-          </li>
           <li>
             Number of vertices: <input type="number" data-setting="options.n" class="option"/>
           </li>
-          <li> Type: <select data-setting="options.puz_diff" class="option">
+          <li> Type:
+            <select data-setting="options.puz_diff" class="option">
               <option value="1">Missing sides (easiest)</option>
               <option value="2">Mixed (medium difficulty)</option>
               <option value="3">Missing vertices (hardest)</option>
             </select>
           </li>
+          <li id="difficulty" class="hidden"> Difficulty: 
+            <select data-setting="mindiff" class="option">
+              <option selected>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+            </select>
+            &nbsp;-&nbsp;
+            <select data-setting="maxdiff" class="option">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+            </select>
+          </li>
+          <li id="minmax"> Vertex values:
+            <input type="number" data-setting="options.min" class="option"/>
+              &leq; n &leq;
+            <input type="number" data-setting="options.max" class="option"/>
+          </li>
         </ul>
       </div>
-
     </div>
 
     <div class="options-row">
@@ -112,7 +136,7 @@
   </div>
 
   <div id="action-buttons">
-    <button id="generate" type=submit>Generate questions</button>
+    <button id="generate" type="submit">Generate questions</button>
     <button id="show-answers" disabled>Show answers</button>
     <button id="print">Print</button>
   </div>
@@ -127,8 +151,27 @@
 
 <div id="modal-overlay" class="hidden"></div>
 
-<div class="modal" id="default-modal">
-  Test
+<div class="modal" id="more-options">
+  <h2>Use difficulty</h2>
+  <h2>Integers</h2>
+  <ul class="options-list">
+    <li> Minimum:  <input type="number" data-setting="integer.min" class="option"/> </li>
+    <li> Maximum:  <input type="number" data-setting="integer.max" class="option"/> </li>
+    <li> <label>Skip zero for multiplication: <input type="checkbox"  data-setting="integer.skipzero" class="option"/></label>
+    </li>
+  </ul>
+
+  <h2>Fractions - addition</h2>
+  <ul class="options-list">
+    <li> Denominators:
+      <select data-setting="fraction-add.denominator" class="option">
+        <option>Same</option>
+        <option>Multiples</option>
+        <option>Different (but not co-prime)</option>
+      </select>
+    </li>
+    <li> Maximum denominator </li>
+  </ul>
 </div>
 
 <!-- Full source code available at https://github.com/jdapayne/arithmagons -->
