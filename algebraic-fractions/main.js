@@ -117,12 +117,25 @@ function makeQuestion(difficulty) {
   }
 
   // will add difficulty later
-  a = randBetween(min_coeff,max_coeff);
-  c = randBetween(min_coeff,max_coeff);
-  e = randBetween(min_coeff,max_coeff);
-  b = randBetween(min_const,max_const);
-  d = randBetween(min_const,max_const);
-  f = randBetween(min_const,max_const);
+  while (
+    ((!a && !b) || (!c && !d) || (!e && !f))  //retry if any expression is 0
+    || (a/c === b/d) //retry if there's a common numerical factor
+  ) { 
+    a = randBetween(min_coeff,max_coeff);
+    c = randBetween(min_coeff,max_coeff);
+    e = randBetween(min_coeff,max_coeff);
+    b = randBetween(min_const,max_const);
+    d = randBetween(min_const,max_const);
+    f = randBetween(min_const,max_const);
+  }
+
+  // if the denominator is negative for each term, then make the numerator negative instead
+  if ( c<=0 && d<=0) {
+    c = -c
+    d = -d
+    a = -a
+    b = -b
+  }
 
   p = a*e; q = a*f + b*e; r = b*f;
   t = c*e; u = c*f + d*e; v = d*f;
@@ -130,6 +143,7 @@ function makeQuestion(difficulty) {
   var question =
     `\\frac{${quadraticString(p,q,r)}}{${quadraticString(t,u,v)}}`;
   var answer = 
+    (c===0 && d===1) ? quadraticString(0,a,b) :
     `\\frac{${quadraticString(0,a,b)}}{${quadraticString(0,c,d)}}`;
 
   return {q: question, a:answer}
