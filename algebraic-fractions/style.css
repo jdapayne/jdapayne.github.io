@@ -1,0 +1,126 @@
+body {
+    font-family: Arial
+}
+
+/* {{{ Questions styling */
+#display-box {
+    display:grid;
+    justify-content: center;
+    grid-template-columns: repeat(4,auto);
+    grid-gap: 25px;
+    width: 80%;
+    margin-left :auto;
+    margin-right: auto;
+    margin-top: 30px
+}
+.mainq {
+    grid-column: 1 / span 4;
+    align-self: end;
+    margin: 0;
+}
+.question-container {
+    position: relative;
+}
+.answer {
+  color: red;
+}
+
+/*}}}*/
+
+/* Options styling {{{*/
+header {
+    width: 60%;
+    margin: auto
+}
+
+#showoptions {
+    font-size: small;
+}
+
+.options-row {
+    display: flex;
+}
+
+.options-part {
+    flex: 1;
+    vertical-align: top;
+    text-align: left;
+    margin: 5px;
+    border: thin solid black;
+    border-radius: 10px;
+    padding: 5px
+}
+
+.options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.options-list li {
+    padding-top: 0.5em
+}
+
+.options-list ul {
+    list-style: none;
+    padding-left: 1em;
+}
+
+.options-list ul li {
+    padding-top: 0.1em
+}
+
+#action-buttons {
+    text-align: center
+}
+
+label {
+    white-space: nowrap
+}
+
+input[type="number"]{
+    width: 3em;
+    text-align: center
+}
+
+/*}}}*/
+
+.hidden {
+    display: none !important
+}
+
+/*Printing{{{*/
+@media only print {
+    #showoptions {display: none !important}
+    #options {display: none !important}
+    .refresh {display: none !important}
+    .question-container {border: none; margin: 0.2em}
+    .answer-toggle {display: none !important}
+    #action-buttons {display: none !important}
+    #zoom {display: none !important}
+}
+/*}}}*/
+
+/*Mobile styling {{{*/
+@media only screen and (max-width: 750px) {
+    body {
+        font-size: 0.8em
+    }
+    header {
+        width: 100%
+    }
+    #zoom {
+        top: 0.4em;
+        right: 0.4em
+    }
+    .question-container {
+        margin: 5px;
+    }
+    .question-container.answer {
+        margin: 1px;
+    }
+    #display-box {
+        margin-top: 25px
+    }
+}
+/*}}}*/
