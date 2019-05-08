@@ -95,6 +95,28 @@ function quadraticString(a,b,c) {
   return x2string + xsign + xstring + constsign + conststring;
 }
 
+function canSimplify(a1,b1,a2,b2) {
+    // can (a1x+b1)/(a2x+b2) be simplified?
+    //
+    // First, take out gcd, and write as c1(a1x+b1) etc
+
+    var c1 = gcd(a1,b1);
+    a1 = a1/c1;
+    b1 = b1/c1;
+
+    var c2 = gcd(a2,b2);
+    a2 = a2/c2;
+    b2 = b2/c2;
+
+    var result=false;
+
+    if ( gcd(c1,c2)>1 || (a1===a2 && b1===b2)) {
+        result = true;
+    }
+
+    return result;
+}
+
 function makeQuestion(difficulty) {
   var a, b, c, d, e, f //(ax+b)(ex+f)/(cx+d)(ex+f) = (px^2+qx+r)/(tx^2+ux+v)
   var p, q, r, t, u, v
@@ -116,11 +138,11 @@ function makeQuestion(difficulty) {
       break;
   }
 
-  // will add difficulty later
   while (
     ((!a && !b) || (!c && !d) || (!e && !f))  //retry if any expression is 0
-    || (a/c === b/d) //retry if there's a common numerical factor
-  ) { 
+    ||  canSimplify(a,b,c,d) //retry if there's a common numerical factor
+  )
+   { 
     a = randBetween(min_coeff,max_coeff);
     c = randBetween(min_coeff,max_coeff);
     e = randBetween(min_coeff,max_coeff);
@@ -152,6 +174,23 @@ function makeQuestion(difficulty) {
 function randBetween(n,m,dist) {
   if (!dist) dist = Math.random;
   return n+Math.floor(dist()*(m-n+1));
+}
+
+function gcd(a, b) {
+  // taken from fraction.js
+  if (!a)
+    return b;
+  if (!b)
+    return a;
+
+  while (1) {
+    a %= b;
+    if (!a)
+      return b;
+    b %= a;
+    if (!b)
+      return a;
+  }
 }
 
 function toggleAnswers(e) {
