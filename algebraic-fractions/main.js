@@ -57,13 +57,24 @@ function generate(i,difficulty) {
   answerp.className = "answer";
   answerp.classList.add("hidden");
 
-  var qnum = "\\text{" + String.fromCharCode(65 + (32+i)%58) + ") }";
-  katex.render(qnum + question.q, questionp,{displayMode: true});
+  var qnum = "\\text{" + questionLetter(i) + ") }";
+  katex.render(qnum + question.q, questionp,{displayMode: true, strict: "ignore"});
   katex.render("= " + question.a, answerp,{displayMode: true});
 
   container.appendChild(questionp);
   container.appendChild(answerp);
 }
+
+function questionLetter(i) {
+    // return a question number. e.g. qNumber(0)="a".
+    // After letters, we get on to greek
+    var letter = 
+        i < 26 ? String.fromCharCode(0x61+i) :
+        i < 52 ? String.fromCharCode(0x41+i-26) :
+        String.fromCharCode(0x3B1+i-52);
+    return letter
+}
+
 
 function quadraticString(a,b,c) {
   if (a===0 && b===0 && c===0) return "0";
