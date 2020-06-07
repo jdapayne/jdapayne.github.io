@@ -55,12 +55,22 @@
       </select>
 
       <label for="speed">Speed</label>
-      <select id="speed">
-        <option value="slow">Slow</option>
-        <option value="fast">Fast</option>
-        <option value="fastest">As fast as possible!</option>
-        <option value="accelerate" selected>Accelerate</option>
-      </select>
+      <!--<select id="speed">-->
+        <!--<option value="slow">Slow</option>-->
+        <!--<option value="fast">Fast</option>-->
+        <!--<option value="fastest">As fast as possible!</option>-->
+        <!--<option value="accelerate" selected>Accelerate</option>-->
+      <!--</select>-->
+      <input type="range" min="0" max="50" value="25" id="speed" disabled>
+
+      <label for="accelerate">Auto
+      <input type="checkbox" id="accelerate" checked>
+      </label>
+
+      <label for="show-construction">Show construction
+      <input type="checkbox" id="show-construction">
+      </label>
+
     </fieldset>
 
       <div id="action-buttons">

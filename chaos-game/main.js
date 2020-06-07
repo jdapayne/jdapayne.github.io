@@ -7,7 +7,7 @@ ZOOM = 1
 // Global state
 let requestID;
 let state = 0; // 0 - blank polygon, 1 - started and running, 2 - stopped with fractal visible
-let vertices;
+let vertices, center, r;
 
 // Other 'globals' stored in DOM elements:
 // m = document.getElementById("m").value
@@ -28,10 +28,17 @@ function init() {
     }
   });
   window.addEventListener("resize", function(e) {
-    if (state ===0 || state === 2) {
+    if (state ===0 ) {
       makePolygon()
     }
   });
+  document.getElementById("accelerate").addEventListener("change", function(e) {
+    if (e.target.checked) {
+      document.getElementById("speed").disabled = true
+    } else {
+      document.getElementById("speed").disabled = false
+    }
+  })
 
   // set up the polygon
   makePolygon()
@@ -45,7 +52,7 @@ function makePolygon() {
   // Set parameters based on space remaining
   const width = window.innerWidth
   const height = window.innerHeight - document.getElementById("header").offsetHeight
-  const r = Math.min(width,height)/2 - PADDING
+  r = Math.min(width,height)/2 - PADDING
 
   // Get and resize the canvas
   const canvas = document.getElementById("display-canvas")
@@ -53,7 +60,7 @@ function makePolygon() {
   canvas.height = height
 
   // Make list of vertices
-  const center = [width/2,height/2]
+  center = [width/2,height/2]
   vertices = []
   for (var i = 0; i < n; i++) {
     let x = ZOOM*r*Math.cos(i*2*Math.PI/n) + center[0]
@@ -104,42 +111,49 @@ function startbutton(e) { // event listener for start/stop
 }
 
 function generate() {
-  // get the canvas context
-  ctx = document.getElementById("display-canvas").getContext("2d")
+  // Three canvases:
+  //  displayCanvas: in the DOM, everything written to that
+  //  fractalCanvas: updated with dots from fractal
+  //  overlayCanvas: overlay of what's going on
+
+  const displayCanvas = document.getElementById("display-canvas")
+  const displayctx = displayCanvas.getContext("2d")
+
+  const fractalCanvas = document.createElement("canvas")
+  fractalCanvas.width = displayCanvas.width
+  fractalCanvas.height = displayCanvas.height
+  const fractalctx = fractalCanvas.getContext("2d")
+  fractalctx.drawImage(displayCanvas,0,0)
+
+  const overlayCanvas = document.createElement("canvas")
+  overlayCanvas.width = displayCanvas.width
+  overlayCanvas.height = displayCanvas.height
+  const overlayctx = overlayCanvas.getContext("2d")
 
   // get parameters from DOM
   m = parseInt(document.getElementById("m").value)
   consecutive = document.getElementById("consecutive").checked
-  speed = document.getElementById("speed").value
+  speedSlider = document.getElementById("speed")
+  speed = parseInt(speedSlider.value)
   dotSize = parseInt(document.getElementById("dot-size").value)
+  accelerate = document.getElementById("accelerate").checked
+  showConstruction = document.getElementById("show-construction").checked
+  
 
-  // speed parameters
-  let ips, fps, accelerate, fpsInterval
-  switch(speed) {
-    case 'slow':
-      ips = 5;
-      accelerate = false;
-      break;
-    case 'fast':
-      ips = 60;
-      accelerate = false;
-      break;
-    case 'fastest':
-      ips = Infinity;
-      accelerate = false;
-      break;
-    case 'accelerate':
-    default:
-      ips = 2;
-      accelerate = true;
-      break;
-  }
-
+  // compute ips/fps etc
+  ips = 2*Math.exp(speed/5) // log scale on slider
   fps = Math.min(ips,30)
   fpsInterval = 1000/fps
 
-  ctx.fillStyle = FG;
-  let point = centroid(vertices) //TODO: choose at random
+  fractalctx.fillStyle = FG;
+
+  // Choose random point
+  let randangle = Math.random()*2*Math.PI
+  let randr = Math.random()*r
+
+  let point = [center[0]+randr*Math.cos(randangle),center[1]+randr*Math.sin(randangle)]
+
+  let lastpoint, chosenVertices;
   let i = 0;
 
   // control fps and iterations per second. Seems off from measurement, but good enough for controlling speed
@@ -158,6 +172,12 @@ function generate() {
       ips = Math.max(2,i-5)
       fps = Math.min(ips,30)
       fpsInterval = 1000/fps
+      speedSlider.value = 5*Math.log(ips/2)
+    } else {
+      speed = parseInt(speedSlider.value)
+      ips = 2*Math.exp(speed/5) // log scale on slider
+      fps = Math.min(ips,30)
+      fpsInterval = 1000/fps
     }
 
     let itersPerFrame = Math.floor(ips/fps) //number of iterations per frame - only going to be approx
@@ -166,19 +186,53 @@ function generate() {
 
     // calculate elapsed time
 
-    // If enough time has passed, then generate itersPerFrame iterations or as many as we can
+    // If enough time has passed, then generate itersPerFrame iterations or as many as we can. Put on fractalcanvas
     if (elapsed > fpsInterval) {
       lastdraw = startofframe
       let j=0
       while (performance.now()-startofframe < fpsInterval && j<itersPerFrame) { 
         point_int = [Math.round(point[0]),Math.round(point[1])]
         //console.log(`point: (${point_int[0]},${point_int[1]})`)
-        ctx.fillRect(point[0],point[1],dotSize,dotSize)
-        point = chooseNext(point,vertices,m,consecutive)
+        fractalctx.fillRect(point[0],point[1],dotSize,dotSize)
+        lastpoint = point
+        let chosenNext = chooseNext(point,vertices,m,consecutive)
+        point = chosenNext[0]
+        chosenVertices = chosenNext[1]
         i++
         j++
       }
+
+      // draw overlay
+      if (showConstruction) {
+        overlayctx.clearRect(0,0,overlayCanvas.width,overlayCanvas.height)
+        overlayctx.strokeStyle = "yellow"
+        overlayctx.beginPath();
+        overlayctx.moveTo(...lastpoint);
+        for (var v = 0; v < chosenVertices.length; v++) {
+          overlayctx.lineTo(...chosenVertices[v])
+        };
+        overlayctx.closePath()
+        overlayctx.stroke()
+
+        overlayctx.fillStyle = "blue"
+        overlayctx.beginPath()
+        overlayctx.arc(lastpoint[0],lastpoint[1],dotSize*2,0,2*Math.PI)
+        overlayctx.fill()
+
+        overlayctx.fillStyle = "red"
+        overlayctx.beginPath()
+        overlayctx.arc(point[0],point[1],dotSize*2,0,2*Math.PI)
+        overlayctx.fill()
+      }
+
+      // Update counter
       counter.innerText=i
+
+      // Push both onto display
+      displayctx.clearRect(0,0,displayCanvas.width,displayCanvas.height)
+      displayctx.drawImage(fractalCanvas,0,0)
+      if (showConstruction) {displayctx.drawImage(overlayCanvas,0,0)}
+
     }
   }
 
@@ -199,7 +253,8 @@ function chooseNext (point,vertices,m,consecutive) {
   }
 
   polygon.push(point);
-  return centroid(polygon)
+  let returnval = [centroid(polygon),polygon.slice(0,-1)]
+  return returnval
 }
 
 function centroid(polygon) {
