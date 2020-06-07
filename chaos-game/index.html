@@ -27,27 +27,51 @@
 </head>
 
 <body>
-<form>
 <header id="header">
   <div><a id="showoptions" href="#">Hide options</a></div>
-  <div id="options">
-    <div class="options-row">
-      <div class="options-part">
-        <ul class="options-list">
-          <li> Number of sides: <input type="number" min="3" class="option" id="n" value="6"/> </li>
-          <li> Number of vertices used: <input type="number" min="1" class="option" id="m" value="2"/> </li>
-          <li> Consecutive vertices? <input type="checkbox" class="option" id="consecutive" checked/></li> 
-        </ul>
+
+  <form id="options">
+    <fieldset>
+      <legend>Fractal settings:</legend>
+
+      <label for="n">Number of sides:</label>
+      <input type="number" min="3" class="option" id="n" value="6"/>
+
+      <label for="m"> Number of vertices used:</label>
+      <input type="number" min="1" class="option" id="m" value="2"/>
+
+      <label for="consecutive"> Consecutive vertices?</label>
+      <input type="checkbox" class="option" id="consecutive" checked/>
+    </fieldset>
+
+    <fieldset>
+      <legend>Animation settings:</legend>
+
+      <label for="dot-size">Dot size</label>
+      <select id="dot-size">
+        <option value="1">Tiny</option>
+        <option value="2" selected>Small</option>
+        <option value="3">Medium</option>
+      </select>
+
+      <label for="speed">Speed</label>
+      <select id="speed">
+        <option value="slow">Slow</option>
+        <option value="fast">Fast</option>
+        <option value="fastest">As fast as possible!</option>
+        <option value="accelerate" selected>Accelerate</option>
+      </select>
+    </fieldset>
+
+      <div id="action-buttons">
+        <button id="generate" type=submit>Go!</button>
       </div>
-    </div>
-  </div>
-  <div id="action-buttons">
-    <button id="generate" type=submit>Go!</button>
-  </div>
+  </form>
 </header>
-</form>
 
 <div id="display-box">
+    <canvas id="display-canvas">Sorry, your browser isn't up to date enough!</canvas>
+    <div id="counter"></div>
 </div>
 
 <script src="main.js"></script>

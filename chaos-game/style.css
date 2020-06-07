@@ -1,83 +1,59 @@
 html, body {
     font-family: Arial;
     height: 100%;
-    margin: 0
+    margin: 0;
+    background-color: black;
+    color: white
 }
 
-/* {{{ Questions styling */
 #display-box {
     display:block;
 }
 
-.mainq {
-    grid-column: 1 / span 4;
-    align-self: end;
-    margin: 0;
+#display-canvas {
+  display:block;
+  margin:auto
 }
-.question-container {
-    position: relative;
-}
-.answer {
-  color: red;
+
+#counter {
+  position:absolute;
+  bottom: 10px;
+  left: 10px;
 }
 
 /*}}}*/
 
 /* Options styling {{{*/
 header {
-    width: 60%;
-    margin: auto
-}
-
-#showoptions {
+    width: 100%;
     font-size: small;
 }
 
-.options-row {
-    display: flex;
+form {
+  text-align: center
 }
 
-.options-part {
-    flex: 1;
-    vertical-align: top;
-    text-align: left;
-    margin: 5px;
-    border: thin solid black;
-    border-radius: 10px;
-    padding: 5px
+fieldset {
+  border-radius: 10px;
+  margin: auto;
+  width: auto;
+  display:inline-block;
 }
 
-.options-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+label {
+  margin-left:0.5em;
 }
 
-.options-list li {
-    padding-top: 0.5em;
-    display: inline;
-    margin-right: 1em;
-}
-
-.options-list ul {
-    list-style: none;
-    padding-left: 1em;
-}
-
-.options-list ul li {
-    padding-top: 0.1em
+input, select {
+  margin-right:0.5em;
 }
 
 #action-buttons {
     text-align: center
 }
 
-label {
-    white-space: nowrap
-}
-
 input[type="number"]{
-    width: 3em;
+    width: 2em;
     text-align: center
 }
 

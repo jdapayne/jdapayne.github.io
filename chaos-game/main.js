@@ -1,62 +1,60 @@
+// Config globals
 PADDING = 10
 FG = 'white'
 BG = 'black'
 ZOOM = 1
-STEP = 300
 
+// Global state
 let requestID;
-let state = 0; // 0 - not started yet, 1 - started and running, 2 - paused
+let state = 0; // 0 - blank polygon, 1 - started and running, 2 - stopped with fractal visible
+let vertices;
 
-document.getElementById("generate").addEventListener("click", function(e) {
-  e.preventDefault();
-  if (state === 0) {
-    generate();
-    state = 1;
-    document.getElementById("generate").innerHTML = "Stop"
-  } else if (state === 1) {
-    window.cancelAnimationFrame(requestID);
-    state = 0;
-    document.getElementById("generate").innerHTML = "Start"
-  }
-});
+// Other 'globals' stored in DOM elements:
+// m = document.getElementById("m").value
+// n = document.getElementById("n").value = vertices.length
+// consecutive = document.getElementById("consecutive").checked
 
-document.getElementById("showoptions").addEventListener("click", toggleOptions);
 
-function generate() {
-  // clear everything
-  document.getElementById("display-box").innerHTML = ""
+window.addEventListener("DOMContentLoaded", init)
 
-  // Get parameters from options
+function init() {
+  // event listeners
+  document.getElementById("generate").addEventListener("click", startbutton)
+  document.getElementById("display-box").addEventListener("click", startbutton)
+  document.getElementById("showoptions").addEventListener("click", toggleOptions);
+  document.getElementById("n").addEventListener("change", function(e) {
+    if (state ===0 || state === 2) {
+      makePolygon()
+    }
+  });
+  window.addEventListener("resize", function(e) {
+    if (state ===0 || state === 2) {
+      makePolygon()
+    }
+  });
+
+  // set up the polygon
+  makePolygon()
+  
+}
+
+function makePolygon() {
+  // Get parameters from DOM
   const n = parseInt(document.getElementById("n").value);
-  const m = parseInt(document.getElementById("m").value);
-  const consecutive = document.getElementById("consecutive").checked;
 
   // Set parameters based on space remaining
   const width = window.innerWidth
   const height = window.innerHeight - document.getElementById("header").offsetHeight
-
-
   const r = Math.min(width,height)/2 - PADDING
 
-  // Construct the canvas
-  const canvas = document.createElement("canvas")
+  // Get and resize the canvas
+  const canvas = document.getElementById("display-canvas")
   canvas.width = width
   canvas.height = height
-  canvas.style.margin = "auto"
-  canvas.style.display = "block"
-  document.getElementById("display-box").appendChild(canvas)
-
-  // Make a counter in bottom left
-  const counter = document.createElement("div")
-  counter.style.position="absolute"
-  counter.style.left = PADDING + "px"
-  counter.style.bottom = PADDING + "px"
-  counter.style.color = FG
-  document.getElementById("display-box").appendChild(counter)
 
   // Make list of vertices
   const center = [width/2,height/2]
-  let vertices = []
+  vertices = []
   for (var i = 0; i < n; i++) {
     let x = ZOOM*r*Math.cos(i*2*Math.PI/n) + center[0]
     let y = ZOOM*r*Math.sin(i*2*Math.PI/n) + center[1]
@@ -76,25 +74,115 @@ function generate() {
   }
   ctx.closePath();
   ctx.stroke();
-
-  ctx.fillStyle = FG;
-  let point = center;
-  i = 0;
-
-  function animateFractal(timestamp){
-    while (performance.now()-timestamp < 33) { // Should keep it 30fps?
-      //console.log(i+ ": " + "(" + point[0] + "," + point[1] + ")")
-      ctx.fillRect(point[0],point[1],1,1)
-      point = chooseNext(point,vertices,m,consecutive)
-      i++
-    }
-
-    counter.innerText=i
-    requestID = window.requestAnimationFrame(animateFractal)
-  }
-  requestID = window.requestAnimationFrame(animateFractal)
 }
 
+function startbutton(e) { // event listener for start/stop
+  e.preventDefault();
+  switch(state) {
+    case 0:
+      generate();
+      state = 1;
+      document.getElementById("generate").innerHTML = "Stop"
+      break;
+
+    case 1:
+      window.cancelAnimationFrame(requestID);
+      state = 2;
+      document.getElementById("generate").innerHTML = "Start"
+      break;
+
+    case 2:
+      makePolygon()
+      state = 1;
+      generate();
+      document.getElementById("generate").innerHTML = "Stop"
+      break;
+    
+    default:
+      throw 'Undefined state!'
+  }
+}
+
+function generate() {
+  // get the canvas context
+  ctx = document.getElementById("display-canvas").getContext("2d")
+
+  // get parameters from DOM
+  m = parseInt(document.getElementById("m").value)
+  consecutive = document.getElementById("consecutive").checked
+  speed = document.getElementById("speed").value
+  dotSize = parseInt(document.getElementById("dot-size").value)
+
+  // speed parameters
+  let ips, fps, accelerate, fpsInterval
+  switch(speed) {
+    case 'slow':
+      ips = 5;
+      accelerate = false;
+      break;
+    case 'fast':
+      ips = 60;
+      accelerate = false;
+      break;
+    case 'fastest':
+      ips = Infinity;
+      accelerate = false;
+      break;
+    case 'accelerate':
+    default:
+      ips = 2;
+      accelerate = true;
+      break;
+  }
+
+  fps = Math.min(ips,30)
+  fpsInterval = 1000/fps
+
+  ctx.fillStyle = FG;
+  let point = centroid(vertices) //TODO: choose at random
+  let i = 0;
+
+  // control fps and iterations per second. Seems off from measurement, but good enough for controlling speed
+  let lastdraw, startofframe, elapsed
+  starttime = lastdraw = performance.now()
+
+  // request next frame
+  requestID = window.requestAnimationFrame(animateFractal)
+
+  function animateFractal(){
+    startofframe = performance.now()
+    elapsed = startofframe - lastdraw
+    
+    // Change ips if we are accelerating
+    if (accelerate) {
+      ips = Math.max(2,i-5)
+      fps = Math.min(ips,30)
+      fpsInterval = 1000/fps
+    }
+
+    let itersPerFrame = Math.floor(ips/fps) //number of iterations per frame - only going to be approx
+    // request another frame
+    requestID = window.requestAnimationFrame(animateFractal)
+
+    // calculate elapsed time
+
+    // If enough time has passed, then generate itersPerFrame iterations or as many as we can
+    if (elapsed > fpsInterval) {
+      lastdraw = startofframe
+      let j=0
+      while (performance.now()-startofframe < fpsInterval && j<itersPerFrame) { 
+        point_int = [Math.round(point[0]),Math.round(point[1])]
+        //console.log(`point: (${point_int[0]},${point_int[1]})`)
+        ctx.fillRect(point[0],point[1],dotSize,dotSize)
+        point = chooseNext(point,vertices,m,consecutive)
+        i++
+        j++
+      }
+      counter.innerText=i
+    }
+  }
+
+}
 
 function chooseNext (point,vertices,m,consecutive) {
   // starting fairly static here - choose random polygon
@@ -106,7 +194,7 @@ function chooseNext (point,vertices,m,consecutive) {
     let n = vertices.length
     let p = Math.floor(Math.random()*n)
     for (var i = 0; i < m; i++) {
-      polygon.push(vertices[(p+1)%n])
+      polygon.push(vertices[(p+i)%n])
     };
   }
 
