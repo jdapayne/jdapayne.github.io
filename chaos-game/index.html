@@ -28,47 +28,66 @@
 
 <body>
 <header id="header">
-  <div><a id="showoptions" href="#">Hide options</a></div>
-
   <form id="options">
     <fieldset>
       <legend>Fractal settings:</legend>
 
-      <label for="n">Number of sides:</label>
-      <input type="number" min="3" class="option" id="n" value="6"/>
+      <label for="n">Number of sides:
+      <input type="number" min="3" class="option" id="n" value="6"/></label>
 
-      <label for="m"> Number of vertices used:</label>
-      <input type="number" min="1" class="option" id="m" value="2"/>
+      <label for="m"> Number of vertices used:
+      <input type="number" min="1" class="option" id="m" value="2"/></label>
 
-      <label for="consecutive"> Consecutive vertices?</label>
-      <input type="checkbox" class="option" id="consecutive" checked/>
+      <label for="consecutive"> Consecutive vertices?
+      <input type="checkbox" class="option" id="consecutive" checked/></label>
+
+      <label for="center-type">Center type:
+        <select name="some_name" id="center-type">
+          <option value="centroid">Centroid</option>
+          <option value="incenter">Incenter</option>
+        </select>
+      </label>
     </fieldset>
 
     <fieldset>
       <legend>Animation settings:</legend>
 
-      <label for="dot-size">Dot size</label>
+      <label for="dot-size">Dot size
       <select id="dot-size">
         <option value="1">Tiny</option>
         <option value="2" selected>Small</option>
         <option value="3">Medium</option>
-      </select>
+      </select></label>
 
-      <label for="speed">Speed</label>
-      <!--<select id="speed">-->
-        <!--<option value="slow">Slow</option>-->
-        <!--<option value="fast">Fast</option>-->
-        <!--<option value="fastest">As fast as possible!</option>-->
-        <!--<option value="accelerate" selected>Accelerate</option>-->
-      <!--</select>-->
-      <input type="range" min="0" max="50" value="25" id="speed" disabled>
+      <!--<div class="group">-->
+        <!--<label for="fg">Foreground-->
+          <!--<input type="color" value="#FFFFFF" id="fg">-->
+        <!--</label>-->
+        <!--<label for="bg">Background-->
+          <!--<input type="color" value="#000000" id="bg">-->
+        <!--</label>-->
+      <!--</div>-->
+
+
+      <label for="transparency">Transparency
+        <input type="range" min="0" max="250" value="0" id="transparency">
+      </label>
+
+      <div class="group">
+      <label for="speed">Speed
+      <input type="range" min="0" max="50" value="25" id="speed" disabled></label>
 
       <label for="accelerate">Auto
       <input type="checkbox" id="accelerate" checked>
       </label>
+      </div>
 
       <label for="show-construction">Show construction
-      <input type="checkbox" id="show-construction">
+      <input type="checkbox" id="show-construction" enabled>
+      </label>
+
+      <label for="show-polygon">Show polygon
+      <input type="checkbox" id="show-polygon" checked>
       </label>
 
     </fieldset>

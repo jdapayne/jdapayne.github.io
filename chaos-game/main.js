@@ -1,7 +1,7 @@
 // Config globals
 PADDING = 10
-FG = 'white'
-BG = 'black'
+FG = '#FFFFFF' // must be hex colours - for now
+BG = '#000000'
 ZOOM = 1
 
 // Global state
@@ -21,10 +21,10 @@ function init() {
   // event listeners
   document.getElementById("generate").addEventListener("click", startbutton)
   document.getElementById("display-box").addEventListener("click", startbutton)
-  document.getElementById("showoptions").addEventListener("click", toggleOptions);
   document.getElementById("n").addEventListener("change", function(e) {
     if (state ===0 || state === 2) {
       makePolygon()
+      state = 0
     }
   });
   window.addEventListener("resize", function(e) {
@@ -40,6 +40,22 @@ function init() {
     }
   })
 
+  document.getElementById("show-polygon").addEventListener("change", function(e) {
+    if (state ===0 || state===2) {
+      makePolygon()
+      state = 0
+    }
+  });
+
+  document.getElementById("speed").addEventListener("mousedown", function(e) {
+    console.log("pressed")
+    if (document.getElementById("accelerate").checked) {
+      e.target.disabled = false
+      document.getElementById("accelerate").disabled = false
+    } 
+  })
+
+  // randomise parameters
   // set up the polygon
   makePolygon()
   
@@ -50,14 +66,15 @@ function makePolygon() {
   const n = parseInt(document.getElementById("n").value);
 
   // Set parameters based on space remaining
-  const width = window.innerWidth
-  const height = window.innerHeight - document.getElementById("header").offsetHeight
+  const width = window.innerWidth - document.getElementById("options").offsetWidth
+  const height = window.innerHeight
   r = Math.min(width,height)/2 - PADDING
 
   // Get and resize the canvas
   const canvas = document.getElementById("display-canvas")
-  canvas.width = width
-  canvas.height = height
+  canvas.width = width;
+  canvas.height = height;
+  canvas.style.left = document.getElementById("options").offsetWidth + "px"
 
   // Make list of vertices
   center = [width/2,height/2]
@@ -69,18 +86,20 @@ function makePolygon() {
   };
 
   // Draw the polygon
-  ctx = canvas.getContext("2d");
-  ctx.fillStyle = BG;
-  ctx.strokeStyle = FG;
+  if (document.getElementById("show-polygon").checked) {
+    ctx = canvas.getContext("2d");
+    ctx.fillStyle = BG;
+    ctx.strokeStyle = FG;
 
-  ctx.fillRect(0,0,width,height);
-  ctx.beginPath();
-  ctx.moveTo(...vertices[0]);
-  for (var i = 1; i < vertices.length; i++) {
-    ctx.lineTo(...vertices[i])
+    ctx.fillRect(0,0,width,height);
+    ctx.beginPath();
+    ctx.moveTo(...vertices[0]);
+    for (var i = 1; i < vertices.length; i++) {
+      ctx.lineTo(...vertices[i])
+    }
+    ctx.closePath();
+    ctx.stroke();
   }
-  ctx.closePath();
-  ctx.stroke();
 }
 
 function startbutton(e) { // event listener for start/stop
@@ -138,14 +157,25 @@ function generate() {
   dotSize = parseInt(document.getElementById("dot-size").value)
   accelerate = document.getElementById("accelerate").checked
   showConstruction = document.getElementById("show-construction").checked
-  
+
+  centerType = document.getElementById("center-type").value
+  let centerFunction;
+  if (centerType === "centroid") {
+    centerFunction = centroid
+  } else if (centerType === "incenter") {
+    centerFunction = incenter
+  }
+
+  transparency = 255 - parseInt(document.getElementById("transparency").value)
+  let transparencyHex = (transparency < 0x10)? "0"+transparency.toString(16) : transparency.toString(16)
+  let fgHexa = FG + transparencyHex
 
   // compute ips/fps etc
-  ips = 2*Math.exp(speed/5) // log scale on slider
+  ips = (speed === 50) ? Infinity : 2*Math.exp(speed/5) // log scale on slider
   fps = Math.min(ips,30)
   fpsInterval = 1000/fps
 
-  fractalctx.fillStyle = FG;
+  fractalctx.fillStyle = fgHexa;
 
   // Choose random point
   let randangle = Math.random()*2*Math.PI
@@ -168,12 +198,12 @@ function generate() {
     elapsed = startofframe - lastdraw
     
     // Change ips if we are accelerating
-    if (accelerate) {
+    if (accelerate) { // ramp up if accelerating
       ips = Math.max(2,i-5)
       fps = Math.min(ips,30)
       fpsInterval = 1000/fps
       speedSlider.value = 5*Math.log(ips/2)
-    } else {
+    } else if (ips < Infinity) { //don't waste cycles going to DOM if on max speed
       speed = parseInt(speedSlider.value)
       ips = 2*Math.exp(speed/5) // log scale on slider
       fps = Math.min(ips,30)
@@ -195,7 +225,7 @@ function generate() {
         //console.log(`point: (${point_int[0]},${point_int[1]})`)
         fractalctx.fillRect(point[0],point[1],dotSize,dotSize)
         lastpoint = point
-        let chosenNext = chooseNext(point,vertices,m,consecutive)
+        let chosenNext = chooseNext(point,vertices,m,consecutive,centerFunction)
         point = chosenNext[0]
         chosenVertices = chosenNext[1]
         i++
@@ -238,7 +268,7 @@ function generate() {
 
 }
 
-function chooseNext (point,vertices,m,consecutive) {
+function chooseNext (point,vertices,m,consecutive,centerFunction) {
   // starting fairly static here - choose random polygon
   
   let polygon = [];
@@ -253,7 +283,7 @@ function chooseNext (point,vertices,m,consecutive) {
   }
 
   polygon.push(point);
-  let returnval = [centroid(polygon),polygon.slice(0,-1)]
+  let returnval = [centerFunction(polygon),polygon.slice(0,-1)]
   return returnval
 }
 
@@ -267,6 +297,29 @@ function centroid(polygon) {
   };
   return [sumx/len,sumy/len];
 }
+
+function incenter(triangle) {
+  // If triangle=[A,B,C], lengths = [a,b,c] where a is opposite A etc.
+  // Sort of seeing if it kinda generalises to other polygons
+
+  let n = triangle.length;
+  let perimeter = 0;
+  let sumx = 0;
+  let sumy = 0;
+
+  for (var i = 0; i < n; i++) {
+    var B = triangle[(i+1)%n]
+    var C = triangle[(i+2)%n]
+    a = Math.sqrt((B[0]-C[0])**2 + (B[1]-C[1])**2)
+
+    sumx += triangle[i][0]*a
+    sumy += triangle[i][1]*a
+    perimeter += a
+  };
+
+  return [sumx/perimeter, sumy/perimeter]
+    
+  };
 
 function getRandomSubarray(arr, size) {
     var shuffled = arr.slice(0), i = arr.length, temp, index;
