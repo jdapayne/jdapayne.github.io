@@ -98,7 +98,7 @@ input[type="color"]{
 /*Mobile styling {{{*/
 @media only screen and (max-aspect-ratio: 5/4) {
     body {
-        font-size: 0.3em
+        font-size: 0.9em
     }
     form {
       position: static;

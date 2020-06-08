@@ -28,10 +28,22 @@ function init() {
     }
   });
   window.addEventListener("resize", function(e) {
-    if (state ===0 ) {
-      makePolygon()
+    switch(state) {
+      case 0:
+        resizeCanvas(false)
+        makePolygon()
+        break;
+      case 1:
+        break;
+      case 2:
+        resizeCanvas(false)
+        makePolygon()
+        break;
+      default:
+        // code
     }
   });
+
   document.getElementById("accelerate").addEventListener("change", function(e) {
     if (e.target.checked) {
       document.getElementById("speed").disabled = true
@@ -42,21 +54,14 @@ function init() {
 
   document.getElementById("show-polygon").addEventListener("change", function(e) {
     if (state ===0 || state===2) {
+      resizeCanvas(false)
       makePolygon()
       state = 0
     }
   });
 
-  document.getElementById("speed").addEventListener("mousedown", function(e) {
-    console.log("pressed")
-    if (document.getElementById("accelerate").checked) {
-      e.target.disabled = false
-      document.getElementById("accelerate").disabled = false
-    } 
-  })
-
-  // randomise parameters
   // set up the polygon
+  resizeCanvas(false)
   makePolygon()
   
 }
@@ -64,41 +69,11 @@ function init() {
 function makePolygon() {
   // Get parameters from DOM
   const n = parseInt(document.getElementById("n").value);
-
-  // Set parameters based on space remaining
-  // If options take up over half, position to the right, full height (no scrolling)
-  // Otherwise position below, and don't wory about scrolling.
-
-  const optionsWidth = document.getElementById("options").offsetWidth;
-  const vpWidth = window.innerWidth  
-  const vpHeight = window.innerHeight  
-
-  const narrowViewPort = (optionsWidth*2 > vpWidth) // probably phones, but maybe also resized window
-
-  let width, height
-  if (narrowViewPort) {
-    width = height = vpWidth
-  } else {
-    width = vpWidth - optionsWidth
-    height = vpHeight
-  }
+  const canvas = document.getElementById("display-canvas")
+  const width = canvas.width
+  const height = canvas.height
 
   r = Math.min(width,height)/2 - PADDING
-
-  // Get and resize the canvas
-  const canvas = document.getElementById("display-canvas")
-  canvas.width = width;
-  canvas.height = height;
-
-  // position below if narrowViewPort, to right if not
-  if (narrowViewPort) {
-    canvas.style.position = "static"
-  } else {
-    // following are already in css:
-    // canvas.style.potision = "absolute"
-    // canvaslstyle.top = "0"
-    canvas.style.left = document.getElementById("options").offsetWidth + "px"
-  }
 
   // Make list of vertices
   center = [width/2,height/2]
@@ -124,6 +99,52 @@ function makePolygon() {
     ctx.closePath();
     ctx.stroke();
   }
+}
+
+function resizeCanvas(reDraw) {
+  // resize canvas. If reDraw is true, copy contents and re-draw it
+  
+  // Set parameters based on space remaining
+  const optionsWidth = document.getElementById("options").offsetWidth;
+  const vpWidth = window.innerWidth  
+  const vpHeight = window.innerHeight  
+  const narrowViewPort = (optionsWidth*2 > vpWidth) // Options take up half width (phones)
+
+  let width, height
+  if (narrowViewPort) {
+    width = height = vpWidth
+  } else {
+    width = vpWidth - optionsWidth
+    height = vpHeight
+  }
+  // Get and resize the canvas
+  const canvas = document.getElementById("display-canvas")
+
+  // copy contents if reDrawing
+  let copyCanvas
+  if (reDraw) {
+    copyCanvas = document.createElement("canvas")
+    copyCanvas.width = canvas.width
+    copyCanvas.height = canvas.height
+    copyCanvas.getContext("2d").drawImage(canvas,0,0)
+  }
+
+  canvas.width = width;
+  canvas.height = height;
+  // position below if narrowViewPort, to right if not
+  if (narrowViewPort) {
+    canvas.style.position = "static"
+  } else {
+    canvas.style.position = "absolute"
+    canvas.style.top = "0px"
+    canvas.style.left = document.getElementById("options").offsetWidth + "px"
+  }
+
+  // copy contents back
+  if (reDraw) {
+    canvas.getContext("2d").drawImage(copyCanvas,0,0,canvas.width,canvas.height)
+  }
+
 }
 
 function startbutton(e) { // event listener for start/stop
