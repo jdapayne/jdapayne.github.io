@@ -66,15 +66,39 @@ function makePolygon() {
   const n = parseInt(document.getElementById("n").value);
 
   // Set parameters based on space remaining
-  const width = window.innerWidth - document.getElementById("options").offsetWidth
-  const height = window.innerHeight
+  // If options take up over half, position to the right, full height (no scrolling)
+  // Otherwise position below, and don't wory about scrolling.
+
+  const optionsWidth = document.getElementById("options").offsetWidth;
+  const vpWidth = window.innerWidth  
+  const vpHeight = window.innerHeight  
+
+  const narrowViewPort = (optionsWidth*2 > vpWidth) // probably phones, but maybe also resized window
+
+  let width, height
+  if (narrowViewPort) {
+    width = height = vpWidth
+  } else {
+    width = vpWidth - optionsWidth
+    height = vpHeight
+  }
+
   r = Math.min(width,height)/2 - PADDING
 
   // Get and resize the canvas
   const canvas = document.getElementById("display-canvas")
   canvas.width = width;
   canvas.height = height;
-  canvas.style.left = document.getElementById("options").offsetWidth + "px"
+
+  // position below if narrowViewPort, to right if not
+  if (narrowViewPort) {
+    canvas.style.position = "static"
+  } else {
+    // following are already in css:
+    // canvas.style.potision = "absolute"
+    // canvaslstyle.top = "0"
+    canvas.style.left = document.getElementById("options").offsetWidth + "px"
+  }
 
   // Make list of vertices
   center = [width/2,height/2]

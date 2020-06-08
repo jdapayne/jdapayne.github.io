@@ -31,6 +31,9 @@ header {
 }
 
 form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   position: absolute;
   left: 0px;
   top: 0px;
@@ -55,7 +58,9 @@ input, select {
 }
 
 #action-buttons {
-    text-align: center
+    text-align: center;
+    flex: 1 0 100%;
+
 }
 
 input[type="number"]{
@@ -71,8 +76,6 @@ input[type="color"]{
   width:2em
 }
 
-range.fakedisabled {
-  
 
 /*}}}*/
 
@@ -93,25 +96,15 @@ range.fakedisabled {
 /*}}}*/
 
 /*Mobile styling {{{*/
-@media only screen and (max-width: 750px) {
+@media only screen and (max-aspect-ratio: 5/4) {
     body {
-        font-size: 0.8em
+        font-size: 0.3em
     }
-    header {
-        width: 100%
-    }
-    #zoom {
-        top: 0.4em;
-        right: 0.4em
-    }
-    .question-container {
-        margin: 5px;
-    }
-    .question-container.answer {
-        margin: 1px;
-    }
-    #display-box {
-        margin-top: 25px
+    form {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%
     }
 }
 /*}}}*/
