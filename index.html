@@ -14,26 +14,51 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>JP Maths</title>
     <style type="text/css" media="screen">
-#content {
+
+ul {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     font-family: Arial;
     margin: auto;
-    margin-top: 10%;
     align-items: center;
 }
 
-#content>div {
-    flex: 1 0 0;
+li {
+    display: flex;
+    border: thin solid black;
+    border-radius: 20px;
+    /*background: rgb(200,200,200);*/
+    margin: 10px;
+    padding: 20px;
+    font-size: 1.3em;
+    width: 190px;
+    align-items: center;
+    justify-content: center;
 }
 
-h1 {
+a {
+    color: black;
+}
+
+img {
+    width: 150px;
+    margin-top:20px;
+}
+/*
+#content>div {
+    display: flex;
+    flex: 0 1 0;
+    height: 200px;
     text-align: center;
     border: thin solid black;
     border-radius: 20px;
+}
+
+h1 {
     margin: 20px;
-    padding: 50px 0;
-    font-size: 1.8em;
+    padding: 50px 50px;
+    font-size: 1.5em;
     background: rgb(200,200,200)
 }
 
@@ -41,43 +66,27 @@ h1.disabled {
     color: rgb(140,140,140)
 }
 
-li {
-    list-style: none
-}
-
-a {
-    color: black;
-}
+      */
 
     </style>
 </head>
 <body>
 
-    <div id="content">
-        <div id="triangles">
-            <h1><a href="att/">Triangles</a></h1>
-        </div>
+    <ul id="content">
+        <li><a href="att/">Triangles<br><img src="att/preview.jpg"></a></li>
 
-        <div id="angles" >
-            <h1><a href="angles/">Missing angles</a></h1>
-        </div>
+        <li><a href="angles/">Missing angles<br><img src="angles/twitter_preview.jpg"></a></li>
 
-        <div id="area-perimeter">
-            <h1><a href="area-perimeter/">Area and perimeter</a></h1>
-        </div>
-        
-        <div id="arithmagons">
-            <h1><a href="arithmagons/">Arithmagons</a></h1>
-        </div>
-        
-        <div id="equations">
-            <h1><a href="equations/">Equation of a line from two points</a></h1>
-        </div>
-        
-        <div id="algebraic-fractions">
-            <h1><a href="algebraic-fractions/">Simplifying algebraic fractions</a></h1>
-        </div>
-    </div>
+        <li><a href="area-perimeter/">Area and perimeter<br><img src="area-perimeter/twitter_preview.jpg"></a></a></li>
+    
+        <li><a href="arithmagons/">Arithmagons<br><img src="arithmagons/twitter_preview.jpg"></a></a></li>
+    
+        <li><a href="equations/">Equation of a line from two points<br><img src="equations/twitter_preview.jpg"></a></a></li>
+    
+        <li><a href="algebraic-fractions/">Algebraic fractions<br><img src="algebraic-fractions/twitter_preview.jpg"></a></a></li>
+
+        <li><a href="choas-game/">Chaos fractals<br><img src="chaos-game/twitter_preview.jpg"></a></a></li>
+    </ul>
 
 </body>
 </html>
