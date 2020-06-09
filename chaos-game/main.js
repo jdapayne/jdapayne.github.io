@@ -84,13 +84,14 @@ function makePolygon() {
     vertices.push([x,y])
   };
 
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = BG;
+  ctx.fillRect(0,0,width,height);
+  
   // Draw the polygon
   if (document.getElementById("show-polygon").checked) {
-    ctx = canvas.getContext("2d");
-    ctx.fillStyle = BG;
     ctx.strokeStyle = FG;
 
-    ctx.fillRect(0,0,width,height);
     ctx.beginPath();
     ctx.moveTo(...vertices[0]);
     for (var i = 1; i < vertices.length; i++) {
