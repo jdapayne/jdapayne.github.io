@@ -3,6 +3,8 @@ PADDING = 10
 FG = '#FFFFFF' // must be hex colours - for now
 BG = '#000000'
 ZOOM = 1
+HIRES = true
+HIRESFACTOR = 10
 
 // Global state
 let requestID;
@@ -118,6 +120,7 @@ function resizeCanvas(reDraw) {
     width = vpWidth - optionsWidth
     height = vpHeight
   }
+
   // Get and resize the canvas
   const canvas = document.getElementById("display-canvas")
 
@@ -130,8 +133,14 @@ function resizeCanvas(reDraw) {
     copyCanvas.getContext("2d").drawImage(canvas,0,0)
   }
 
-  canvas.width = width;
-  canvas.height = height;
+  canvas.width = HIRES? width*HIRESFACTOR : width;
+  canvas.height = HIRES? height*HIRESFACTOR : height;
+
+  if (HIRES) { // not needed if not hi res
+    canvas.style.width=width+"px";
+    canvas.style.height=height+"px";
+  }
+
   // position below if narrowViewPort, to right if not
   if (narrowViewPort) {
     canvas.style.position = "static"
