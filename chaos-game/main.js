@@ -3,8 +3,8 @@ PADDING = 10
 FG = '#FFFFFF' // must be hex colours - for now
 BG = '#000000'
 ZOOM = 1
-HIRES = true
-HIRESFACTOR = 10
+HIRES = false
+HIRESFACTOR = 3
 
 // Global state
 let requestID;
