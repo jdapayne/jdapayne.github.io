@@ -247,7 +247,7 @@ function generate() {
 
       let clockwiseAlternated = clockwise
       if (alternate) {
-        clockwiseAlternated = (i%2 === 0)? clockwise : -clockwise
+        clockwiseAlternated = ((i/subDivideN)%2 === 0)? clockwise : -clockwise
       }
       generateWithPoints(startPoints,jumpSize,clockwiseAlternated)
     }
