@@ -110,6 +110,25 @@ document.addEventListener('DOMContentLoaded', generate)
 document.getElementById('options').addEventListener('change',generate)
 window.addEventListener('resize', generate)
 
+// hacky enabling/disabling of subdivision
+document.getElementById('subdivide').addEventListener('change', e=> {
+  const checkbox = document.getElementById('subdivide')
+  if (subdivide.checked) {
+    document.querySelectorAll('.subdiv-label').forEach( elem => {
+      elem.classList.remove('disabled')
+    })
+    document.getElementById('subdividen').disabled = false
+    document.getElementById('alternate').disabled = false
+  } else {
+    document.querySelectorAll('.subdiv-label').forEach( elem => {
+      elem.classList.add('disabled')
+    })
+    document.getElementById('subdividen').disabled = true
+    document.getElementById('alternate').disabled = true
+  }
+})
+
+
 // a fix for negative %
 Number.prototype.mod = function(n) {
   return ((this%n)+n)%n;
@@ -119,6 +138,55 @@ Number.prototype.mod = function(n) {
 const canvas = document.getElementById("pursuit")
 const ctx = canvas.getContext("2d")
 
+function generateWithPoints(points,jumpSize,clockwise) {
+  let currentPoints = points
+  const n = points.length
+
+  let iterations = 0
+  while( Point.distance(currentPoints[0],currentPoints[1]) > 1.1*jumpSize) {
+    // set up color:
+    const color = 'rgba(15,25,100,0)'
+
+    // draw polygon
+    
+    /* Works for star polygons, but not for filling
+    ctx.beginPath()
+    for (let i = 0; i < n; i++) {
+      const p = currentPoints[i]
+      const next = currentPoints[(i + clockwise).mod(n)]
+      ctx.moveTo(p.x, p.y)
+      ctx.lineTo(next.x, next.y)
+    }
+    ctx.fillStyle = color
+    ctx.stroke()
+    ctx.closePath()
+    */
+    
+    /* Breaks on star polygons but allows filling */
+    // 0 -> (n-1) -> ... -> 1 for negative clockwise
+    ctx.beginPath()
+    ctx.moveTo(currentPoints[0].x,currentPoints[0].y)
+    let j = 0
+    for (let i = 0; i < n; i++) {
+      const p = currentPoints[j]
+      const next = currentPoints[(j + clockwise + n)%n]
+      ctx.lineTo(next.x, next.y)
+      j = (j + clockwise + n)%n
+    }
+    ctx.fillStyle = color
+    ctx.closePath()
+    ctx.fill()
+    ctx.stroke()
+
+    // update polygon
+    // create deep clone of current points - not necessary really - only need first point cloned
+    const lastPoints = currentPoints.map(p=>p.clone())
+    for (var i = 0; i < currentPoints.length; i++) {
+      currentPoints[i].moveToward(lastPoints[(i+clockwise).mod(n)],jumpSize)
+    };
+    iterations ++
+  }
+}
 
 function generate() {
   // get options from form
@@ -142,38 +210,47 @@ function generate() {
 
   ctx.clearRect(0,0,canvas.width,canvas.height) // clear canvas
 
-  // set up starting points
-  let currentPoints = []
-  for (let i = 0; i < n; i++) {
-    const pt = Point.fromPolarDeg(r, 360/n*i).translate(width/2,height/2)
-    currentPoints.push(pt)
-  };
 
-  let iterations = 0
-  while( Point.distance(currentPoints[0],currentPoints[1]) > 1.1*jumpSize) {
-    // set up color:
-    //const color = 'rgba(70,90,255,0.1)'
-
-    // draw polygon
-    ctx.beginPath()
+  const subdivide = document.getElementById('subdivide').checked
+  
+  if (!subdivide) {  // Single polygon
+    let startPoints = []
     for (let i = 0; i < n; i++) {
-      const p = currentPoints[i]
-      const next = currentPoints[(i + clockwise).mod(n)]
-      ctx.moveTo(p.x, p.y)
-      ctx.lineTo(next.x, next.y)
-    }
-    //ctx.fillStyle = color
-    ctx.stroke()
-    ctx.closePath()
-
-    // update polygon
-    // create deep clone of current points - not necessary really - only need first point cloned
-    const lastPoints = currentPoints.map(p=>p.clone())
-    for (var i = 0; i < currentPoints.length; i++) {
-      currentPoints[i].moveToward(lastPoints[(i+clockwise).mod(n)],jumpSize)
+      const pt = Point.fromPolarDeg(r, 360/n*i).translate(width/2,height/2)
+      startPoints.push(pt)
     };
-    iterations ++
+    generateWithPoints(startPoints,jumpSize,clockwise)
   }
 
-  console.log(iterations)
+  else { // Subdivided polygon
+    const alternate = document.getElementById('alternate').checked
+    let subDivideN = parseInt(document.getElementById('subdividen').value)
+
+    // only allow factors
+    while (n % subDivideN !== 0) {
+      subDivideN --
+    }
+
+
+    let center = new Point(0,0).translate(width/2,height/2)
+    let outerPoints = []
+    for (let i = 0; i < n; i++) {
+      const pt = Point.fromPolarDeg(r, 360/n*i).translate(width/2,height/2)
+      outerPoints.push(pt)
+    };
+
+    for (let i = 0; i < n; i+= subDivideN) {
+      let startPoints = [center.clone()]
+      for (let j = 0; j< subDivideN+1; j++) {
+        startPoints.push(outerPoints[(i+j)%n].clone())
+      }
+
+      let clockwiseAlternated = clockwise
+      if (alternate) {
+        clockwiseAlternated = (i%2 === 0)? clockwise : -clockwise
+      }
+      generateWithPoints(startPoints,jumpSize,clockwiseAlternated)
+    }
+  }
+
 }

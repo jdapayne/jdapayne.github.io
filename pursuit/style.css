@@ -9,8 +9,9 @@ html, body {
 
 /* Options styling {{{*/
 header {
-    width: 60%;
-    margin: auto
+    width: 100%;
+    display: flex;
+    justify-content: center
 }
 
 canvas {
@@ -19,10 +20,15 @@ canvas {
 
 .options-list {
     list-style: none;
-    margin: 5px;
+    margin: auto;
     border: thin solid black;
     border-radius: 10px;
-    padding: 5px
+    padding: 5px;
+    display: inline-block;
+}
+
+.disabled {
+  color: grey
 }
 
 .options-list li {
