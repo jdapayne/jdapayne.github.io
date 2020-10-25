@@ -4,9 +4,6 @@ html, body {
     margin: 0
 }
 
-
-/*}}}*/
-
 /* Options styling {{{*/
 header {
     width: 100%;
@@ -45,6 +42,10 @@ input[type="number"]{
 #holder {
   width:100%;
   display:flex;
+}
+
+label {
+  white-space: nowrap;
 }
 
 /*}}}*/

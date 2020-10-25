@@ -9,6 +9,8 @@
   <meta name="og:image" content="https://jdapayne.github.io/pursuit/twitter_preview.png" />
   <meta name="og:description" content="Curves of pursuit generator, with high resolution printing">
 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
 
   <title>Curves of pursuit</title>
   <link rel="stylesheet" href="style.css" type="text/css" media="screen" charset="utf-8">
@@ -18,18 +20,16 @@
 <body>
 
 <header id="header" class="no-print">
-  <div id="options">
-      <ul class="options-list">
-        <li> Number of sides: <input type="number" min="3" class="option" id="n" value="3"/> </li>
-        <li> Jump size <input type="number" min="5" class="option" id="jumpsize" value="40"/> </li>
-        <li> Skip (+ or -) <input type="number" class="option" id="clockwise" value="1"/></li> 
-      </ul>
-      <ul class="options-list">
-        <li><label>Subdivide polygon <input type="checkbox" class="option" id="subdivide"/></li>
-        <li><label class="disabled subdiv-label">Edges/division <input type="number" min="1" class="option" id="subdividen" value="1" disabled/></label> </li>
-        <li><label class="disabled subdiv-label">Alternate direction <input type="checkbox" class="option" id="alternate" checked disabled/></label></li>
-      </ul>
-  </div>
+    <ul class="options-list">
+      <li> <label>Number of sides: <input type="number" min="3" class="option" id="n" value="3"/> </label></li>
+      <li> <label>Jump size <input type="number" min="5" class="option" id="jumpsize" value="40"/> </label></li>
+      <li> <label>Skip (+ or -) <input type="number" class="option" id="clockwise" value="1"/></label></li> 
+    </ul>
+    <ul class="options-list">
+      <li><label>Subdivide polygon <input type="checkbox" class="option" id="subdivide"/></li>
+      <li><label class="disabled subdiv-label">Edges/division <input type="number" min="1" class="option" id="subdividen" value="1" disabled/></label> </li>
+      <li><label class="disabled subdiv-label">Alternate direction <input type="checkbox" class="option" id="alternate" checked disabled/></label></li>
+    </ul>
 </header>
 
 <div id="holder">

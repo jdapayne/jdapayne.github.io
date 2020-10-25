@@ -107,7 +107,7 @@ class Point {
 }
 
 document.addEventListener('DOMContentLoaded', generate)
-document.getElementById('options').addEventListener('change',generate)
+document.getElementById('header').addEventListener('change',generate)
 window.addEventListener('resize', generate)
 
 // hacky enabling/disabling of subdivision
@@ -129,10 +129,12 @@ document.getElementById('subdivide').addEventListener('change', e=> {
 })
 
 
-// a fix for negative %
+// a fix for negative mod %
 Number.prototype.mod = function(n) {
   return ((this%n)+n)%n;
 }
+
+const CANVAS_PADDING = 30
 
 // get canvas
 const canvas = document.getElementById("pursuit")
@@ -199,7 +201,7 @@ function generate() {
   const availableHeight = (window.innerHeight - document.getElementById("header").offsetHeight)*2
   const width = Math.min(availableWidth,availableHeight)
   const height = width
-  const r = width/2
+  const r = width/2 - CANVAS_PADDING
 
   // internal width and height (double for high res)
   canvas.width = width
