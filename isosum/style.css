@@ -1,0 +1,110 @@
+html, body {
+    font-family: Arial;
+    height: 100%;
+    margin: 0;
+    background-color: black;
+    color: white
+}
+
+#display-box {
+    display:block;
+}
+
+#display-canvas {
+  display:block;
+  position: absolute;
+  top: 0px;
+}
+
+#counter {
+  position:absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+/*}}}*/
+
+/* Options styling {{{*/
+header {
+    width: 100%;
+    font-size: small;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  font-size: small;
+}
+
+fieldset {
+  border-radius: 10px;
+  margin-left:10px;
+  margin-top:10px;
+  width: auto;
+  display:block;
+}
+
+label {
+  display:block;
+  margin-bottom: 0.4em;
+  margin-top: 0.4em
+}
+
+input, select {
+}
+
+#action-buttons {
+    text-align: center;
+    flex: 1 0 100%;
+
+}
+
+input[type="number"]{
+    width: 2em;
+    text-align: center
+}
+
+div.group>label {
+  display:inline-block
+}
+
+input[type="color"]{
+  width:2em
+}
+
+
+/*}}}*/
+
+.hidden {
+    display: none !important
+}
+
+/*Printing{{{*/
+@media only print {
+    #showoptions {display: none !important}
+    #options {display: none !important}
+    .refresh {display: none !important}
+    .question-container {border: none; margin: 0.2em}
+    .answer-toggle {display: none !important}
+    #action-buttons {display: none !important}
+    #zoom {display: none !important}
+}
+/*}}}*/
+
+/*Mobile styling {{{*/
+@media only screen and (max-aspect-ratio: 5/4) {
+    body {
+        font-size: 0.9em
+    }
+    form {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%
+    }
+}
+/*}}}*/

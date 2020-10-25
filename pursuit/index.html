@@ -1,0 +1,37 @@
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@DrPMaths" />
+  <meta name="twitter:creator" content="@DrPMaths" />
+  <meta name="og:title" content="Curves of pursuit generator" />
+  <meta name="og:image" content="https://jdapayne.github.io/pursuit/twitter_preview.jpg" />
+  <meta name="og:description" content="Curves of pursuit generator, with high resolution printing">
+
+
+  <title>Curves of pursuit</title>
+  <link rel="stylesheet" href="style.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="print.css" type="text/css" media="print" charset="utf-8">
+
+</head>
+<body>
+
+<header id="header" class="no-print">
+  <div id="options">
+      <ul class="options-list">
+        <li> Number of sides: <input type="number" min="3" class="option" id="n" value="3"/> </li>
+        <li> Jump size <input type="number" min="5" class="option" id="jumpsize" value="40"/> </li>
+        <li> Skip vertices (negative for clockwise) <input type="number" class="option" id="clockwise" value="1"/></li> 
+      </ul>
+  </div>
+</header>
+
+<div id="holder">
+  <canvas id="pursuit"></canvas>
+</div>
+
+  <script src="main.js" type="text/javascript" charset="utf-8"></script>
+  
+</body>
+</html>

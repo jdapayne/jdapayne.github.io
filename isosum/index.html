@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Chaos game</title>
+  <link rel="stylesheet" href="style.css" type="text/css" media="all">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-124339741-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-124339741-1');
+  </script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Twitter card -->
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@DrPMaths" />
+  <meta name="twitter:creator" content="@DrPMaths" />
+  <meta name="og:title" content="Chaos game fractal generator" />
+  <meta name="og:image" content="https://jdapayne.github.io/chaos-game/twitter_preview.jpg?1" />
+  <meta name="og:description" content="Fractal generator for variations on the chaos game">
+
+</head>
+
+<body>
+<header id="header">
+  <form id="options">
+    <fieldset>
+      <legend>Settings</legend>
+
+      <label for="sum">Sum
+      <input type="number" class="option" id="sum" value="6"/></label>
+    </fieldset>
+
+      <div id="action-buttons">
+        <button id="generate" type=submit>Go!</button>
+      </div>
+  </form>
+</header>
+
+<div id="display-box">
+    <canvas id="display-canvas">Sorry, your browser isn't up to date enough!</canvas>
+    <div id="counter"></div>
+</div>
+
+<script src="main.js"></script>
+
+</body>
+</html>
+

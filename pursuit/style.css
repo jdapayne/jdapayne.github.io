@@ -1,0 +1,72 @@
+html, body {
+    font-family: Arial;
+    height: 100%;
+    margin: 0
+}
+
+
+/*}}}*/
+
+/* Options styling {{{*/
+header {
+    width: 60%;
+    margin: auto
+}
+
+canvas {
+  margin: auto;
+}
+
+.options-list {
+    list-style: none;
+    margin: 5px;
+    border: thin solid black;
+    border-radius: 10px;
+    padding: 5px
+}
+
+.options-list li {
+    padding-top: 0.5em;
+    display: inline;
+    margin-right: 1em;
+}
+
+input[type="number"]{
+    width: 3em;
+    text-align: center
+}
+
+#holder {
+  width:100%;
+  display:flex;
+}
+
+/*}}}*/
+
+
+/*Printing{{{*/
+/*}}}*/
+
+/*Mobile styling {{{*/
+@media only screen and (max-width: 750px) {
+    body {
+        font-size: 0.8em
+    }
+    header {
+        width: 100%
+    }
+    #zoom {
+        top: 0.4em;
+        right: 0.4em
+    }
+    .question-container {
+        margin: 5px;
+    }
+    .question-container.answer {
+        margin: 1px;
+    }
+    #display-box {
+        margin-top: 25px
+    }
+}
+/*}}}*/

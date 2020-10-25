@@ -1,0 +1,22 @@
+html, body {
+    font-family: Arial;
+    height: 100%;
+    margin: 0
+}
+
+canvas {
+  height: 21cm !important;
+  width: 21cm !important;
+}
+
+
+/*}}}*/
+
+/* Options styling {{{*/
+header {
+    display: none;
+}
+
+.options-list {
+    display: none;
+}
