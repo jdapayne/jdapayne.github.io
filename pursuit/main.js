@@ -140,31 +140,14 @@ const CANVAS_PADDING = 30
 const canvas = document.getElementById("pursuit")
 const ctx = canvas.getContext("2d")
 
-function generateWithPoints(points,jumpSize,clockwise) {
+function generateWithPoints(points,jumpSize,clockwise,colour) {
   let currentPoints = points
   const n = points.length
 
   let iterations = 0
-  while( Point.distance(currentPoints[0],currentPoints[1]) > 1.1*jumpSize) {
-    // set up color:
-    const color = 'rgba(15,25,100,0)'
+  while( Point.distance(currentPoints[0],currentPoints[1]) > 1.1*jumpSize && iterations < 500) {
 
-    // draw polygon
-    
-    /* Works for star polygons, but not for filling
-    ctx.beginPath()
-    for (let i = 0; i < n; i++) {
-      const p = currentPoints[i]
-      const next = currentPoints[(i + clockwise).mod(n)]
-      ctx.moveTo(p.x, p.y)
-      ctx.lineTo(next.x, next.y)
-    }
-    ctx.fillStyle = color
-    ctx.stroke()
-    ctx.closePath()
-    */
-    
-    /* Breaks on star polygons but allows filling */
+    /* Doesn't work on 'disconnected' star polygons - e.g. 6 vertices, skip of 2*/
     // 0 -> (n-1) -> ... -> 1 for negative clockwise
     ctx.beginPath()
     ctx.moveTo(currentPoints[0].x,currentPoints[0].y)
@@ -175,7 +158,7 @@ function generateWithPoints(points,jumpSize,clockwise) {
       ctx.lineTo(next.x, next.y)
       j = (j + clockwise + n)%n
     }
-    ctx.fillStyle = color
+    ctx.fillStyle = colour
     ctx.closePath()
     ctx.fill()
     ctx.stroke()
@@ -195,6 +178,7 @@ function generate() {
   const n = parseInt(document.getElementById("n").value)
   const jumpSize = parseInt(document.getElementById("jumpsize").value)
   const clockwise = parseInt(document.getElementById("clockwise").value)
+  const colour = document.getElementById("colour").value + "15"
 
   // Width and height are 'internal' for high res
   const availableWidth = window.innerWidth * 2
@@ -221,7 +205,7 @@ function generate() {
       const pt = Point.fromPolarDeg(r, 360/n*i).translate(width/2,height/2)
       startPoints.push(pt)
     };
-    generateWithPoints(startPoints,jumpSize,clockwise)
+    generateWithPoints(startPoints,jumpSize,clockwise,colour)
   }
 
   else { // Subdivided polygon
@@ -251,7 +235,7 @@ function generate() {
       if (alternate) {
         clockwiseAlternated = ((i/subDivideN)%2 === 0)? clockwise : -clockwise
       }
-      generateWithPoints(startPoints,jumpSize,clockwiseAlternated)
+      generateWithPoints(startPoints,jumpSize,clockwiseAlternated,colour)
     }
   }
 
