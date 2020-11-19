@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": ["DOM","DOM.Iterable","ES6"],
+    "target": "ES6"
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

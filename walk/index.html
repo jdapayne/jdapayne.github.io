@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background-color: black;
+    }
+    #cvs {
+      background-color: black;
+    }
+    #counter {
+      color: white;
+      position: fixed;
+      left:5px;
+      bottom: 5px;
+    }
+    #buttons {
+      position: absolute;
+      left: 5px;
+      top: 5px
+    }
+    #home {
+      position: absolute;
+      top:5px;
+      right:5px;
+      color: white
+    }
+  </style>
+  <title>Walk thing</title>
+</head>
+<body>
+<canvas id="cvs"></canvas>
+<div id = "buttons">
+<button id="randomSplit">Splitting random walk</button>
+<button id="nonRandomTree">Non-random tree</button>
+<button id="randomishTree">Randomish tree</button>
+</div>
+<div id="counter"></div>
+<div id="home"><a href="/">home</a></div>
+<script src="index.js"></script>
+</body>
+</html>
