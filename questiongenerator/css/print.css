@@ -1,0 +1,20 @@
+/* Hide a bunch of stuff */
+.question-actions { display: none; }
+.show-answers { display: none }
+.question-headerbox { display: none }
+footer {display: none}
+.topic-chooser { display: none }
+.hidden { display: none !important }
+
+
+.question-displaybox {
+  --column-width: 300px; /* will be updated by js */
+  width: calc(100%-20mm);
+  margin-left :10mm;
+  margin-right: 10mm;
+  margin-top: 10mm; 
+}
+
+.mainq {
+    grid-column: 1 / -1;
+}

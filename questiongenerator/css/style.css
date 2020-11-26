@@ -1,0 +1,392 @@
+body {
+    font-family: Arial
+}
+
+/*
+#print-button {
+  position:absolute;
+  top:10px;
+  right:10px;
+}
+*/
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-top: black solid 2px;
+  background: #eee;
+  padding: 0.5em;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  z-index: 999;
+  text-align: center;
+}
+
+footer>:first-child {
+  text-align: left;
+}
+
+footer>:last-child {
+  text-align: right;
+  padding-right: 1em
+}
+
+#print-button img {
+  width:25px
+}
+
+/*
+#home-button {
+  position:absolute;
+  top:10px;
+  left:10px;
+}
+*/
+
+#home-button img {
+  width:25px
+}
+
+/* {{{ Questions styling */
+
+.question-displaybox {
+  --column-width: 300px; /* TODO will be updated by js */
+  display:grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fill,minmax(var(--column-width),1fr));
+  grid-gap: 25px;
+  width: 80%;
+  margin-left :auto;
+  margin-right: auto;
+  margin-top: 30px;
+}
+
+.mainq {
+    grid-column: 1 / -2;
+    align-self: end;
+    margin: 0;
+}
+
+
+.question-container {
+    position: relative;
+    flex: 1 1;
+    z-index:2;
+    display: flex;
+    flex-flow: row;
+}
+
+.question-container.individual-command-word {
+  flex-direction: column;
+}
+
+.question-number { padding: 0.3em 0.9em 0.3em 0.3em }
+
+.katex-display {
+  margin: 0.5em 0
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.question-actions {
+  border: thin solid black;
+  display: flex;
+  position: absolute;
+  background: #eee;
+  border-radius: 4px;
+  z-index: 3;
+}
+
+
+.icon-button {
+  width: 30px;
+  height: 30px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  background-color: #ccd;
+}
+
+.question-refresh {
+  background-image: url('../img/refresh.png');
+}
+
+.question-answer {
+  background-image: url('../img/answer.png')
+}
+
+.loader {
+  width: 15px;
+  height: 15px;
+  border: 5px lightgrey solid;
+  border-radius: 50%;
+  border-top: 5px solid black;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  animation: spin 0.5s linear infinite;
+  transform: translate(-7px, -7px);
+}
+
+@keyframes spin {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+p.question {
+  margin: 0
+}
+
+.extra-options-button {
+  display: inline-block;
+  background-image: url('../img/settings-grey.png');
+  width: 20px;
+  height: 20px;
+  vertical-align: bottom;
+  margin-left: 0.5em;
+}
+
+.extra-options-button:hover {
+  background-image: url('../img/settings-black.png');
+  background-color: transparent;
+}
+
+.show-answers {
+  margin:0;
+  margin-left: auto;
+}
+
+.question-headerbox {
+  font-size: 0.9em;
+  display: flex;
+  flex-wrap: wrap;
+  border: thin dashed black;
+  border-radius: 2px;
+  width: 80%;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.question-div {
+    position: relative;
+}
+
+.n-questions {
+  margin-left: 0.4em;
+  margin-right:2em;
+}
+
+.button {
+  border: thin solid black;
+  border-radius: 3px;
+  padding: 0.3em;
+  cursor: pointer;
+  background: #eee;
+  font-size: inherit;
+  outline: none;
+}
+
+.button:hover {
+  background: #ccd
+}
+
+.button:disabled:hover {
+  background: #eee;
+  cursor: not-allowed;
+}
+
+.modal-button {
+  float: right;
+  padding: 0.5em;
+}
+
+.answer {
+  color: red;
+}
+
+/*}}}*/
+
+.topic-chooser {
+  margin-left:0.4em;
+  margin-right:2em;
+}
+
+.slider-outer {
+  vertical-align: middle;
+  display: inline-block;
+  width: 300px;
+  margin-left:0.4em;
+  margin-right:2em;
+}
+
+/* labels {{{*/
+.label {
+  position: absolute;
+  display: flex;
+  justify-content:center;
+  flex-direction:column;
+  text-align: center;
+  white-space: nowrap;
+  transform: translate(-50%,-50%);
+}
+.label.answer {
+  color: red;
+}
+.label.extra-answer {
+  color: red;
+  transform: translateY(-100%);
+  font-size: small;
+  display: block;
+  text-align: left;
+}
+.label.extra-info {
+  transform: translateY(-100%);
+  font-size: small;
+  display: block;
+  text-align: left;
+}
+.label.side {
+  min-width: 35px;
+  min-height: 35px;
+  border: thin solid black;
+  background: white;
+}
+.label.vertex {
+  border-radius: 50%;
+  min-width: 50px;
+  min-height: 50px;
+  border: thin solid black;
+  background: white;
+}
+.label>div {
+    margin: 5px;
+}
+
+/*
+.question-canvas {
+  border: thin solid red
+}
+*/
+/*}}}*/
+
+
+/* Options styling {{{*/
+
+.options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-flow: row;
+    align-content: flex-start;
+}
+
+.options-list.suboptions {
+  padding-left: 1em;
+  margin-left: 2em;
+  border-left: thin solid darkgray;
+  font-size: 95%;
+  margin-top: 0.7em
+}
+
+.options-column > li {
+    margin-top: 0.5em;
+    display: flex;
+    align-items: baseline;
+}
+
+.options-column >li:first-child {
+  margin-top: 0;
+}
+
+.options-column {
+  margin-left: 1em;
+  padding-left: 1em;
+  border-left: thin solid black;
+}
+
+.options-column:first-child {
+  margin-left: 0;
+  padding-left:0;
+  border-left: none;
+}
+
+.options-heading {
+  height: 1em;
+  margin-top: 1em !important;
+  font-weight: bold;
+}
+
+.options-list ul li {
+    padding-top: 0.1em;
+    padding-right: 0.6em
+}
+
+.options-sublist {
+  list-style: none;
+  padding-left: 0;
+}
+
+.options-sublist li {
+  display: inline
+}
+
+.options-sublist.options-sublist-vertical li {
+  display:block
+}
+
+.disabled {
+  color: gray;
+}
+
+label {
+    white-space: nowrap
+}
+
+input[type="number"]{
+    width: 3em;
+    text-align: center
+}
+
+/*}}}*/
+
+.hidden {
+    display: none !important
+}
+
+/*Mobile styling {{{*/
+
+@media only screen and (max-width: 750px) {
+    body {
+        font-size: 0.8em
+    }
+    .question-headerbox {
+        width: 100%
+    }
+    #zoom {
+        top: 0.4em;
+        right: 0.4em
+    }
+    .question-container {
+        margin: 5px;
+    }
+    .question-container.answer {
+        margin: 1px;
+    }
+    #display-box {
+        margin-top: 25px
+    }
+}
+/*}}}*/
