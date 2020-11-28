@@ -23,77 +23,76 @@
     <title>JP Maths</title>
     <style type="text/css" media="screen">
 
-ul {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    font-family: Arial;
-    margin: auto;
-    align-items: center;
-}
+    img {
+      height: 150px;
+      vertical-align: middle;
+      margin: 0 10px;
+    }
 
-li {
-    display: flex;
-    border: thin solid black;
-    border-radius: 20px;
-    /*background: rgb(200,200,200);*/
-    margin: 10px;
-    padding: 20px;
-    font-size: 1.3em;
-    width: 190px;
-    align-items: center;
-    justify-content: center;
-}
+    li {
+      list-style: none;
+      border-radius: 5px;
+      margin: 10px
+    }
 
-a {
-    color: black;
-}
+    #content{
+      display: flex;
+      flex-direction: column;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 1.3em;
 
-img {
-    width: 150px;
-    margin-top:20px;
-}
-/*
-#content>div {
-    display: flex;
-    flex: 0 1 0;
-    height: 200px;
-    text-align: center;
-    border: thin solid black;
-    border-radius: 20px;
-}
+    }
 
-h1 {
-    margin: 20px;
-    padding: 50px 50px;
-    font-size: 1.5em;
-    background: rgb(200,200,200)
-}
+    #content>li {
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      justify-content: center;
+      border: thin solid black;
+    }
 
-h1.disabled {
-    color: rgb(140,140,140)
-}
+    #content>li>ul {
+      display: flex;
+      flex-flow: row wrap;
+    }
 
-      */
+    a {
+      color: black
+    }
 
     </style>
 </head>
 <body>
 
     <ul id="content">
-        <li><a href="att/">Triangles<br><img src="att/preview.jpg"></a></li>
+      <li><a href="questiongenerator/">Question generator<img src="questiongenerator/twitter_preview.jpg" style="height:200px"></a></li>
 
-        <li><a href="angles/">Missing angles<br><img src="angles/twitter_preview.jpg"></a></li>
+      <li> Animations/image generators etc.
+        <ul>
+          <li><a href="chaos-game/">Chaos fractals<img src="chaos-game/twitter_preview.jpg"></a></a></li>
+          <li><a href="pursuit/">Curves of pursuit<img src="pursuit/twitter_preview.png"></a></a></li>
+          <li><a href="att/">Triangles<img src="att/preview.jpg"></a></li>
+          <li><a href="walk/">Random(ish) walks<img src="walk/preview.jpg"></a></li>
+        </ul>
+      </li>
 
-        <li><a href="area-perimeter/">Area and perimeter<br><img src="area-perimeter/twitter_preview.jpg"></a></a></li>
-    
-        <li><a href="arithmagons/">Arithmagons<br><img src="arithmagons/twitter_preview.jpg"></a></a></li>
-    
-        <li><a href="equations/">Equation of a line from two points<br><img src="equations/twitter_preview.jpg"></a></a></li>
-    
-        <li><a href="algebraic-fractions/">Algebraic fractions<br><img src="algebraic-fractions/twitter_preview.jpg"></a></a></li>
 
-        <li><a href="chaos-game/">Chaos fractals<br><img src="chaos-game/twitter_preview.jpg"></a></a></li>
+      <li>Individual question generators (old)
+        <ul>
+
+          <li><a href="angles/">Missing angles</a></li>
+
+          <li><a href="area-perimeter/">Area and perimeter</a></li>
+      
+          <li><a href="arithmagons/">Arithmagons</a></li>
+      
+          <li><a href="equations/">Equation of a line from two points</a></li>
+      
+          <li><a href="algebraic-fractions/">Algebraic fractions</a></li>
+
+        </ul>
+      </li>
+
     </ul>
 
 </body>
