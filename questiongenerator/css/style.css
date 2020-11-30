@@ -1,14 +1,7 @@
 body {
-    font-family: Arial
+    font-family: Arial;
+    margin-bottom: 50px;
 }
-
-/*
-#print-button {
-  position:absolute;
-  top:10px;
-  right:10px;
-}
-*/
 
 footer {
   position: fixed;
@@ -76,13 +69,19 @@ footer>:last-child {
     z-index:2;
     display: flex;
     flex-flow: row;
+    justify-content: center;
 }
 
 .question-container.individual-command-word {
   flex-direction: column;
+  align-items: center;
+  justify-content: start;
 }
 
-.question-number { padding: 0.3em 0.9em 0.3em 0.3em }
+.question-number {
+  padding: 0.3em 0.9em 0.3em 0.3em;
+  align-self: start
+}
 
 .katex-display {
   margin: 0.5em 0
@@ -104,7 +103,6 @@ footer>:last-child {
   z-index: 3;
 }
 
-
 .icon-button {
   width: 30px;
   height: 30px;
@@ -114,16 +112,45 @@ footer>:last-child {
   cursor: pointer;
 }
 
+.icon-button.inline {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: bottom;
+  margin-left: 0.5em;
+  align-self: center
+}
+
 .icon-button:hover {
   background-color: #ccd;
 }
 
-.question-refresh {
+.icon-button.inline:hover {
+  background-color: transparent;
+}
+
+.icon-button.question-refresh {
   background-image: url('../img/refresh.png');
 }
 
-.question-answer {
+.icon-button.question-answer {
   background-image: url('../img/answer.png')
+}
+
+.icon-button.extra-options {
+  background-image: url('../img/settings-grey.png');
+}
+
+.icon-button.extra-options:hover {
+  background-image: url('../img/settings-black.png');
+}
+
+.icon-button.topic-info {
+  color: grey;
+}
+
+.icon-button.topic-info:hover {
+  color: black;
 }
 
 .loader {
@@ -148,19 +175,11 @@ p.question {
   margin: 0
 }
 
-.extra-options-button {
+p.adjacent {
   display: inline-block;
-  background-image: url('../img/settings-grey.png');
-  width: 20px;
-  height: 20px;
-  vertical-align: bottom;
-  margin-left: 0.5em;
+  margin: 0 0.15em
 }
 
-.extra-options-button:hover {
-  background-image: url('../img/settings-black.png');
-  background-color: transparent;
-}
 
 .show-answers {
   margin:0;
@@ -361,6 +380,15 @@ input[type="number"]{
 }
 
 /*}}}*/
+
+em {
+  font-family: KaTeX_Main;
+  font-size: 1.2em
+}
+
+ol li {
+  margin-bottom: 0.8em
+}
 
 .hidden {
     display: none !important
