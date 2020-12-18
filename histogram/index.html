@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <title>Histogram maker</title>
 </head>
+
 <body>
-  <div class="part" id="table"></div>
-  <div class="part" id="histogram"></div>
+  <div class="part">
+    <div class="subpart" id="table"></div>
+    <div class="subpart" id="options"> <h2>Options:</h2> </div>
+    <div class="subpart" id="statistics"> <h2>Statistics:</h2> </div>
+  </div>
+
+  <div class="part">
+    <div class="subpart" id="histogram"></div>
+  </div>
+
   <script src="main.js" type="module"></script>
 </body>
+
 </html>

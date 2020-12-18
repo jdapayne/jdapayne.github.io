@@ -1,6 +1,8 @@
 import { createElem } from './createElem.js';
 import FrequencyTable from './FrequencyTable.js';
 import Histogram from './Histogram.js';
+import Options from './Options.js';
+import Statistics from './Statistics.js';
 /* Make table and buttons*/
 const tableDiv = document.getElementById('table');
 const frequencyTable = new FrequencyTable('time', 't', 'seconds');
@@ -34,9 +36,17 @@ tableCopy.addEventListener('click', () => {
         window.alert(`Error: ${reason}`);
     });
 });
+/* Make options */
+const optionsDiv = document.getElementById('options');
+const options = new Options();
+optionsDiv === null || optionsDiv === void 0 ? void 0 : optionsDiv.append(options.htmlElement);
+/* Make statistics */
+const statsDiv = document.getElementById('statistics');
+const stats = new Statistics(frequencyTable);
+statsDiv === null || statsDiv === void 0 ? void 0 : statsDiv.append(stats.htmlElement);
 /* Make histogram and buttons*/
 const histogramDiv = document.getElementById('histogram');
-const histogram = new Histogram(frequencyTable, 800, 600);
+const histogram = new Histogram(frequencyTable, options, 800, 600);
 histogramDiv.append(histogram.canvas);
 histogram.render();
 createElem('br', undefined, histogramDiv);
@@ -44,8 +54,12 @@ const histogramCopy = createElem('button', undefined, histogramDiv);
 histogramCopy.innerHTML = 'Copy histogram';
 const histogramDownload = createElem('button', undefined, histogramDiv);
 histogramDownload.innerHTML = 'Download image';
-/* Make the histogram respond to changes in the table*/
-frequencyTable.htmlElement.addEventListener('change', () => { histogram.render(); });
+/* Make the histogram respond to changes in the table and options*/
+frequencyTable.htmlElement.addEventListener('change', () => {
+    histogram.render();
+    stats.update();
+});
+options.htmlElement.addEventListener('change', () => { histogram.render(); });
 /* Event listeners for histogram buttons */
 histogramCopy.addEventListener('click', () => {
     const blobPromise = new Promise((resolve, reject) => {

@@ -15,11 +15,22 @@ input {
 
 .part {
   display: inline-block;
+  vertical-align: top;
+}
+
+.subpart {
+  display: block;
   border: thin solid black;
   border-radius: 5px;
-  margin: 1em;
+  margin: 1em 0.5em;
   padding: 1em;
-  vertical-align: top;
+}
+
+h2 {
+  font-size: 1.1em;
+  font-family: sans-serif;
+  margin: 0;
+  margin-bottom: 0.5em;
 }
 
 input.variable-name {

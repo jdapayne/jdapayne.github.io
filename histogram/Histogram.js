@@ -12,8 +12,9 @@ const PADDING_END = 25;
 const PADDING_TOP = 20;
 const PADDING_BOTTOM = 100;
 export default class Histogram {
-    constructor(table, width, height) {
+    constructor(table, options, width, height) {
         this.frequencyTable = table;
+        this.options = options;
         this.width = width;
         this.height = height;
     }
@@ -28,7 +29,7 @@ export default class Histogram {
         return this._canvas;
     }
     get xMin() {
-        if (this.frequencyTable.rows.length === 0)
+        if (this.frequencyTable.rows.length === 0 || this.options.startAtZero)
             return 0;
         return this.frequencyTable.rows[0].lowerBound;
     }
@@ -119,7 +120,8 @@ export default class Histogram {
                 const [x2, y2] = this.scaledCoords([row.upperBound, row.frequencyDensity]);
                 const width = x2 - x1;
                 const height = y2 - y1;
-                ctx.fillRect(x1, y1, width, height);
+                if (this.options.fillBars)
+                    ctx.fillRect(x1, y1, width, height);
                 ctx.strokeRect(x1, y1, width, height);
             }
         });
@@ -151,8 +153,10 @@ export default class Histogram {
             ctx.moveTo(x - 10, y);
             ctx.lineTo(...this.scaledCoords([this.xMax, h]));
             ctx.stroke();
-            const tickStr = h.toLocaleString(undefined, { maximumFractionDigits: 3 });
-            ctx.fillText(tickStr, x - 15, y);
+            if (this.options.showYValues) {
+                const tickStr = h.toLocaleString(undefined, { maximumFractionDigits: 3 });
+                ctx.fillText(tickStr, x - 15, y);
+            }
         }
         ctx.textBaseline = 'top';
         ctx.textAlign = 'center';
@@ -162,8 +166,10 @@ export default class Histogram {
             ctx.moveTo(x, y + 10);
             ctx.lineTo(...this.scaledCoords([x1, this.yMax]));
             ctx.stroke();
-            const tickStr = x1.toLocaleString(undefined, { maximumFractionDigits: 3 });
-            ctx.fillText(tickStr, x, y + 15);
+            if (this.options.showXValues) {
+                const tickStr = x1.toLocaleString(undefined, { maximumFractionDigits: 3 });
+                ctx.fillText(tickStr, x, y + 15);
+            }
         }
         // y label 
         {
