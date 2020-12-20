@@ -5,8 +5,13 @@ export default class Row {
         this._lowerBound = lb;
         this._upperBound = ub;
         this._frequency = frequency;
-        this.varSymbol = varSymbol;
+        this._varSymbol = varSymbol;
         this.canEditLowerBound = canEditLowerBound;
+    }
+    get varSymbol() { return (this._varSymbol); }
+    set varSymbol(symbol) {
+        this._varSymbol = symbol;
+        this.updateVariableSymbol();
     }
     get lowerBound() { return this._lowerBound; }
     set lowerBound(lb) {
@@ -52,6 +57,13 @@ export default class Row {
         }
         return this._htmlElement;
     }
+    updateVariableSymbol() {
+        if (this._htmlElement) {
+            const varSymbol = this.htmlElement.querySelector('.variable-symbol');
+            if (varSymbol)
+                varSymbol.innerHTML = this.varSymbol;
+        }
+    }
     updateFrequencyDensity() {
         if (this._htmlElement) {
             const fdCell = this.htmlElement.querySelector('span.frequency-density');
@@ -73,7 +85,7 @@ export default class Row {
         else {
             createElem('span', 'lower-bound', classCell).innerHTML = this.lowerBound.toString();
         }
-        classCell.insertAdjacentHTML('beforeend', ` &lt; ${this.varSymbol} &leq; `);
+        classCell.insertAdjacentHTML('beforeend', ` &lt; <span class="variable-symbol">${this.varSymbol}</span> &leq; `);
         const ubInput = createElem('input', 'upper-bound', classCell);
         ubInput.type = 'number';
         ubInput.value = this.upperBound.toString();

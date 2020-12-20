@@ -24,6 +24,8 @@ export default class FrequencyTable {
         }
     }
     removeLastRow() {
+        if (this.rows.length === 1)
+            return;
         const lastRow = this.rows.pop();
         lastRow === null || lastRow === void 0 ? void 0 : lastRow.htmlElement.remove();
     }
@@ -77,6 +79,26 @@ export default class FrequencyTable {
         });
         html += '</table>';
         return html;
+    }
+    get maxFD() {
+        if (this.rows.length === 0)
+            return 1;
+        let maxFD = 0;
+        this.rows.forEach(row => {
+            if (row.frequencyDensity > maxFD)
+                maxFD = row.frequencyDensity;
+        });
+        return maxFD;
+    }
+    get maxValue() {
+        if (this.rows.length === 0)
+            return NaN;
+        return this.rows[this.rows.length - 1].upperBound;
+    }
+    get minValue() {
+        if (this.rows.length === 0)
+            return NaN;
+        return this.rows[0].lowerBound;
     }
     generateHTML() {
         const table = createElem('table', 'frequency-table');

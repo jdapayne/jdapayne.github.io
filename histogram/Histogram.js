@@ -28,17 +28,17 @@ export default class Histogram {
         }
         return this._canvas;
     }
-    get xMin() {
-        if (this.frequencyTable.rows.length === 0 || this.options.startAtZero)
-            return 0;
-        return this.frequencyTable.rows[0].lowerBound;
-    }
-    get xMax() {
-        if (this.frequencyTable.rows.length === 0)
-            return 10;
-        return this.frequencyTable.rows[this.frequencyTable.rows.length - 1].upperBound;
-    }
-    /** Size of ticks on the y-axis. Returns major then minor sizes*/
+    /************************
+     * Basic canvas metrics *
+     ************************/
+    get paddedWidth() { return this.canvas.width - PADDING_START - PADDING_END; }
+    get paddedHeight() { return this.canvas.height - PADDING_TOP - PADDING_BOTTOM; }
+    get canvasOriginX() { return PADDING_START; }
+    get canvasOriginY() { return this.canvas.height - PADDING_BOTTOM; }
+    /*******************
+     * Y value metrics *
+     *******************/
+    /** Value size of ticks on the y-axis. Returns major then minor sizes*/
     get tickSizeY() {
         let i = 0;
         let tickSize = 0.01;
@@ -48,7 +48,7 @@ export default class Histogram {
             const base = i % 3 === 0 ? 1 :
                 i % 3 === 1 ? 2 : 5;
             const value = base * Math.pow(10, power);
-            if (value > this.maxFD / 5)
+            if (value > this.frequencyTable.maxFD / 5)
                 break;
             tickSize = value;
             subDivisions = base === 5 ? 5 : 2;
@@ -58,49 +58,71 @@ export default class Histogram {
     }
     /** The number of ticks on the y-axis */
     get nTicksY() {
-        let nTicks = this.maxFD / this.tickSizeY[0];
+        let nTicks = this.frequencyTable.maxFD / this.tickSizeY[0];
         nTicks = Math.ceil(nTicks);
         return nTicks;
-    }
-    get tickSizeX() {
-        let i = 0;
-        let tickSize = 0.01;
-        let subDivisions = 2;
-        while (true) {
-            const power = Math.floor(i / 3) - 2;
-            const base = i % 3 === 0 ? 1 :
-                i % 3 === 1 ? 2 : 5;
-            const value = base * Math.pow(10, power);
-            if (value > this.xMax / 8)
-                break;
-            tickSize = value;
-            subDivisions = base === 5 ? 5 : 2;
-            i++;
-        }
-        return [tickSize, tickSize / 10];
-    }
-    get nTicksX() {
-        return Math.ceil(this.xMax / this.tickSizeX[0]);
     }
     /** The maximum value of the y-axis */
     get yMax() {
         return (this.nTicksY + 1) * this.tickSizeY[0];
     }
-    get maxFD() {
+    /*******************
+     * X value metrics *
+     * These are evaluated in opposite orders dpenind on options.square
+     * If square: nTicks->tickSize->maxX
+     * If !square: maxX->tickSizeX->nTicks
+     * *****************/
+    get nTicksX() {
+        if (this.options.square) {
+            const canvasTickSize = this.scaleY(this.tickSizeY[0]); // size in canvas units of the y ticks
+            return this.paddedWidth / canvasTickSize; //NB not an integer
+        }
+        else {
+            return Math.ceil(this.xMax / this.tickSizeX[0]);
+        }
+    }
+    get tickSizeX() {
+        // Square: Smallest n (from 1,2,5x10^n) such that n*nTicksX+minX >= table.maxValue
+        // !Square: Smallest n such that 8*n + minX >= table.maxValue
+        const ticks = this.options.square ? this.nTicksX : 8;
+        let i = 0;
+        let tickSize = 0.01;
+        while (true) {
+            const power = Math.floor(i / 3) - 2;
+            const base = i % 3 === 0 ? 1 :
+                i % 3 === 1 ? 2 : 5;
+            const value = base * Math.pow(10, power);
+            if (value * ticks + this.xMin >= this.frequencyTable.maxValue) {
+                if (this.options.square)
+                    tickSize = value;
+                break;
+            }
+            tickSize = value;
+            i++;
+        }
+        return [tickSize, tickSize / 10];
+    }
+    get xMin() {
+        if (this.frequencyTable.rows.length === 0 || this.options.startAtZero)
+            return 0;
+        return this.frequencyTable.minValue;
+    }
+    get xMax() {
         if (this.frequencyTable.rows.length === 0)
-            return 1;
-        let maxFD = 0;
-        this.frequencyTable.rows.forEach(row => {
-            if (row.frequencyDensity > maxFD)
-                maxFD = row.frequencyDensity;
-        });
-        return maxFD;
+            return 10;
+        if (this.options.square) {
+            return this.tickSizeX[0] * Math.floor(this.nTicksX * 10) / 10;
+        }
+        else {
+            return this.frequencyTable.rows[this.frequencyTable.rows.length - 1].upperBound;
+        }
     }
     render() {
         const ctx = this.canvas.getContext('2d');
         if (!ctx)
             throw new Error('Could not get canvas context');
-        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         // draw axes
         ctx.beginPath();
         ctx.moveTo(...this.scaledCoords([this.xMin, 0]));
@@ -128,7 +150,7 @@ export default class Histogram {
         // minor ticks y
         ctx.lineWidth = 1;
         ctx.strokeStyle = 'grey';
-        for (let h = 0; h <= this.yMax; h += this.tickSizeY[1]) {
+        for (let h = 0; h <= this.yMax + 0.0000001; h += this.tickSizeY[1]) {
             ctx.beginPath();
             ctx.moveTo(...this.scaledCoords([this.xMin, h]));
             ctx.lineTo(...this.scaledCoords([this.xMax, h]));
@@ -188,17 +210,41 @@ export default class Histogram {
             ctx.fillText(`${this.frequencyTable.varName} (${this.frequencyTable.unit})`, x, y + 60);
         }
     }
+    /**
+     * Scales an value unit to the corresponding x value for canvas
+     * @param x A length corresponding to graph units
+     */
     scaleX(x) {
-        return (x - this.xMin) / (this.xMax - this.xMin) * (this.canvas.width - PADDING_START - PADDING_END) + PADDING_START;
+        return (x - this.xMin) / (this.xMax - this.xMin) * (this.paddedWidth) + PADDING_START;
     }
+    /**
+     * Scales a value unit to the corresponding height on a canvas.
+     * N.B Because the graph has origin at bottom, and canvas has origin at the top,
+     * this is *not* the corresponding y-coordinate. That will be canvas.height - PADDING_BOTTOM - scaleY(coord)
+     * @param y A length corresponding to graph unit
+     */
     scaleY(y) {
-        return this.canvas.height - PADDING_BOTTOM - y / this.yMax * (this.canvas.height - PADDING_BOTTOM - PADDING_TOP);
+        return y / this.yMax * (this.canvas.height - PADDING_BOTTOM - PADDING_TOP);
     }
     scaledCoords([x, y]) {
-        return [this.scaleX(x), this.scaleY(y)];
+        return [this.scaleX(x), this.canvas.height - PADDING_BOTTOM - this.scaleY(y)];
     }
     copyToClipBoard() {
         return __awaiter(this, void 0, void 0, function* () {
         });
     }
 }
+/*  Thoughts on metrics:
+  *  Canvas metrics:
+  * canvasAxisLengthX - length in canvas units
+  * canvasAxisLengthY - lenght in canvas units
+  * canvasOriginX
+  * canvasOriginY
+  * canvasTickSize - major tick size in canvas units
+  *
+    * Unit metrics:
+    *   xMin
+    *   xMax
+    *   yMin(=0 not used
+    *   yMax
+*/ 

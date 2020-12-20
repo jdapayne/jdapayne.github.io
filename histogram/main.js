@@ -5,7 +5,7 @@ import Options from './Options.js';
 import Statistics from './Statistics.js';
 /* Make table and buttons*/
 const tableDiv = document.getElementById('table');
-const frequencyTable = new FrequencyTable('time', 't', 'seconds');
+const frequencyTable = new FrequencyTable('Time', 't', 'seconds');
 frequencyTable.addRow();
 frequencyTable.addRow();
 frequencyTable.addRow();
