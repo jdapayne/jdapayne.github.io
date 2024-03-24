@@ -9,14 +9,16 @@
       };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://www.desmos.com/api/v1.8/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   </head>
   <body>
-    <p>Hellow world</p>
-    <div id="stuff"></div>
-    <button type="button" id="button">Test</button>
+    <div id="question"></div>
+    <input type="text" id="ssid" placeholder="SSID">
+    <button type="button" id="generate">Generate</button>
     <script type="text/javascript">
       async function getQuestion(ssid) {
-        const url = "https://9e3vk7q3zc.execute-api.eu-west-2.amazonaws.com/http-function-url-tutorial";
+        const url = "https://9e3vk7q3zc.execute-api.eu-west-2.amazonaws.com/http-function-url-tutorial?ssid=" + ssid;
         const response = await fetch(url, {
           method: "GET"
         });
@@ -24,15 +26,20 @@
         return response.json();
       }
       
-      document.getElementById("button").addEventListener("click", () => {
-        getQuestion("1234").then(data => {
+      document.getElementById("generate").addEventListener("click", () => {
+        const ssid = parseInt(document.getElementById("ssid").value);
+        getQuestion(ssid).then(data => {
           const questionContent = data.question.content;
-          console.log(data);
-          const stuffDiv = document.getElementById("stuff");
-          stuffDiv.innerHTML = questionContent;
+          const questionDiv = document.getElementById("question");
+          questionDiv.innerHTML = questionContent;
           MathJax.typeset();
+          //Find scripts and execute them
+          const scripts = questionDiv.getElementsByTagName("script")
+          for (let script of scripts) {
+            eval(script.innerHTML);
+          }
+          });
         });
-      });
       
     </script>
   </body>
