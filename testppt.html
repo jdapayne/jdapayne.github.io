@@ -17,15 +17,10 @@
         return data;
       }
 
-      const stuff = getQuestion("1234").then(data => {
-        return data;
+      getQuestion("1234").then(data => {
+        console.log(data);
       })
       
-      console.log(stuff);
-      
-      const stuffDiv = document.getElementById("stuff");
-      stuffDiv.innerHTML = stuff;
-      document.body.appendChild(stuffDiv);
       
     </script>
   </body>
