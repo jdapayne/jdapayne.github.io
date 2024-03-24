@@ -5,10 +5,28 @@
     <p>Hellow world</p>
     <div id="stuff"></div>
     <script type="text/javascript">
-      const stuff = "stuff";
+      async function getQuestion(ssid) {
+        const payload = {
+          ssid: ssid
+        };
+        const response = await fetch("https://httpbin.org/post", {
+          method: "POST",
+          body: json.stringify(payload),
+        });
+        const data = await response.json();
+        return data;
+      }
+
+      const stuff = getQuestion("1234").then(data => {
+        return data;
+      })
+      
+      console.log(stuff);
+      
       const stuffDiv = document.getElementById("stuff");
       stuffDiv.innerHTML = stuff;
       document.body.appendChild(stuffDiv);
+      
     </script>
   </body>
 </html>
