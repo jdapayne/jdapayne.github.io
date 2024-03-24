@@ -2,6 +2,13 @@
   <head>
   </head>
   <body>
-    <p>Hellow worlds</p>
+    <p>Hellow world</p>
+    <div id="stuff"></div>
+    <script type="text/javascript">
+      const stuff = "stuff";
+      const stuffDiv = document.getElementById("stuff");
+      stuffDiv.innerHTML = stuff;
+      document.body.appendChild(stuffDiv);
+    </script>
   </body>
 </html>
