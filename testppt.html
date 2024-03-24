@@ -1,5 +1,14 @@
 <html>
   <head>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['[m]', '[/m]']]
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
     <p>Hellow world</p>
@@ -7,24 +16,21 @@
     <button type="button" id="button">Test</button>
     <script type="text/javascript">
       async function getQuestion(ssid) {
-        const url = "https://www.drfrost.org/api/tasks/question/get";
-        //const url = "https://httpbin.org/post";
-        const payload = {
-          ssid: ssid
-        };
+        const url = "https://9e3vk7q3zc.execute-api.eu-west-2.amazonaws.com/http-function-url-tutorial";
         const response = await fetch(url, {
-          method: "POST",
-          body: "{\"ssid\":2335}",
+          method: "GET"
         });
-        return response.text();
+        console.log(response.status);
+        return response.json();
       }
       
       document.getElementById("button").addEventListener("click", () => {
         getQuestion("1234").then(data => {
+          const questionContent = data.question.content;
           console.log(data);
           const stuffDiv = document.getElementById("stuff");
-          const stuff = data.data;
-          stuffDiv.innerHTML = data;
+          stuffDiv.innerHTML = questionContent;
+          MathJax.typeset();
         });
       });
       
