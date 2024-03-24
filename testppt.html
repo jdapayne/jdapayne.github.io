@@ -4,23 +4,30 @@
   <body>
     <p>Hellow world</p>
     <div id="stuff"></div>
+    <button type="button" id="button">Test</button>
     <script type="text/javascript">
       async function getQuestion(ssid) {
+        //const url = "https://www.drfrost.org/api/tasks/question/get";
+        const url = "https://httpbin.org/post";
         const payload = {
           ssid: ssid
         };
-        const response = await fetch("https://httpbin.org/post", {
+        const response = await fetch(url, {
           method: "POST",
-          body: json.stringify(payload),
+          body: "{\"ssid\":2335}",
+          credentials: "omit",
         });
-        const data = await response.json();
-        return data;
+        return response.text();
       }
-
-      getQuestion("1234").then(data => {
-        console.log(data);
-      })
       
+      document.getElementById("button").addEventListener("click", () => {
+        getQuestion("1234").then(data => {
+          console.log(data);
+          const stuffDiv = document.getElementById("stuff");
+          const stuff = data.data;
+          stuffDiv.innerHTML = data;
+        });
+      });
       
     </script>
   </body>
