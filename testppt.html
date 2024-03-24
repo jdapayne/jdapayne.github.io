@@ -7,15 +7,14 @@
     <button type="button" id="button">Test</button>
     <script type="text/javascript">
       async function getQuestion(ssid) {
-        //const url = "https://www.drfrost.org/api/tasks/question/get";
-        const url = "https://httpbin.org/post";
+        const url = "https://www.drfrost.org/api/tasks/question/get";
+        //const url = "https://httpbin.org/post";
         const payload = {
           ssid: ssid
         };
         const response = await fetch(url, {
           method: "POST",
           body: "{\"ssid\":2335}",
-          credentials: "omit",
         });
         return response.text();
       }
