@@ -11,6 +11,15 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://www.desmos.com/api/v1.8/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .desmos-image {
+        width: 100%;
+        height: auto;
+      }
+    </style>
   </head>
   <body>
     <div id="question"></div>
@@ -38,8 +47,21 @@
           for (let script of scripts) {
             eval(script.innerHTML);
           }
-          });
+
+          //screenshot images for scaling
+          const desmoss = questionDiv.getElementsByClassName("desmos");
+          for (let desmos of desmoss) {
+            const calculator = $(desmos).data().calculator;
+            calculator.asyncScreenshot({showLabels: true}, s => {
+              const img = document.createElement('img');
+              img.classList.add('desmos-image');
+              img.src = s;
+              desmos.after(img);
+              desmos.style.display='none';
+            })
+          }
         });
+      });
       
     </script>
   </body>
