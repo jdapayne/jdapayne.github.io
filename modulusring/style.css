@@ -1,8 +1,23 @@
+body {
+  font-family: ABeeZee, sans-serif;
+  background-color: #FFFFEF;
+  font-size: 16pt;
+}
+
 canvas {
-  border: thin solid black;
   margin: 20px;
 }
 
 input[type="number"] {
   width: 40px;
+}
+
+#form {
+  margin: 20px;
+  border: thin solid black;
+  padding: 10px;
+  border-radius: 6px;
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: #EFEFCF;
 }
