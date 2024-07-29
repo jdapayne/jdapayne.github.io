@@ -5,6 +5,7 @@ export default class ModRing {
         this.expression = 'n';
         this.modulus = 10;
         this.singlePath = false;
+        this.start = 1;
         this.width = width;
         this.height = height;
     }
@@ -100,7 +101,8 @@ export default class ModRing {
             ctx.closePath();
         }
     }
-    drawPathIn(ctx, center, radius, start = 1) {
+    drawPathIn(ctx, center, radius) {
+        const start = this.start;
         let path = [];
         let current = start;
         while (true) {
