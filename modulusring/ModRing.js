@@ -6,6 +6,7 @@ export default class ModRing {
         this.modulus = 10;
         this.singlePath = false;
         this.start = 1;
+        this.drawArrows = false;
         this.width = width;
         this.height = height;
     }
@@ -94,11 +95,7 @@ export default class ModRing {
             const j = this.evaluateExpression(i);
             const xj = radius * Math.cos(2 * Math.PI * j / this.modulus);
             const yj = -radius * Math.sin(2 * Math.PI * j / this.modulus);
-            ctx.beginPath();
-            ctx.moveTo(center[0] + x, center[0] + y);
-            ctx.lineTo(center[0] + xj, center[0] + yj);
-            ctx.stroke();
-            ctx.closePath();
+            drawLine(ctx, center[0] + x, center[0] + y, center[0] + xj, center[0] + yj, this.drawArrows);
         }
     }
     drawPathIn(ctx, center, radius) {
@@ -120,12 +117,32 @@ export default class ModRing {
             const j = this.evaluateExpression(i);
             const xj = radius * Math.cos(2 * Math.PI * j / this.modulus);
             const yj = -radius * Math.sin(2 * Math.PI * j / this.modulus);
-            ctx.beginPath();
-            ctx.moveTo(center[0] + x, center[0] + y);
-            ctx.lineTo(center[0] + xj, center[0] + yj);
-            ctx.stroke();
-            ctx.closePath();
+            drawLine(ctx, center[0] + x, center[0] + y, center[0] + xj, center[0] + yj, this.drawArrows);
         });
     }
+}
+function drawLine(ctx, x1, y1, x2, y2, arrow = false, size = 20, offset = 30) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    if (arrow) {
+        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        const unitVector = [(x2 - x1) / length, (y2 - y1) / length];
+        const normalVector = [-unitVector[1], unitVector[0]];
+        const pt0 = [
+            x2 - unitVector[0] * (size + offset) + normalVector[0] * size / 2,
+            y2 - unitVector[1] * (size + offset) + normalVector[1] * size / 2
+        ];
+        const pt1 = [x2 - unitVector[0] * offset, y2 - unitVector[1] * offset];
+        const pt2 = [
+            x2 - unitVector[0] * (size + offset) - normalVector[0] * size / 2,
+            y2 - unitVector[1] * (size + offset) - normalVector[1] * size / 2
+        ];
+        ctx.moveTo(pt0[0], pt0[1]);
+        ctx.lineTo(pt1[0], pt1[1]);
+        ctx.lineTo(pt2[0], pt2[1]);
+    }
+    ctx.stroke();
+    ctx.closePath();
 }
 //# sourceMappingURL=ModRing.js.map
