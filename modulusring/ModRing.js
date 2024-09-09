@@ -49,10 +49,11 @@ export default class ModRing {
         const offset = this.modulus > 30 ? 30 : 35;
         // Draw points and labels
         for (let i = 0; i < this.modulus; i++) {
-            const x = radius * Math.cos(2 * Math.PI * i / this.modulus);
-            const y = -radius * Math.sin(2 * Math.PI * i / this.modulus);
-            const x2 = (radius + offset) * Math.cos(2 * Math.PI * i / this.modulus);
-            const y2 = -(radius + offset) * Math.sin(2 * Math.PI * i / this.modulus);
+            const angle = this.getAngle(i);
+            const x = radius * Math.cos(angle);
+            const y = -radius * Math.sin(angle);
+            const x2 = (radius + offset) * Math.cos(angle);
+            const y2 = -(radius + offset) * Math.sin(angle);
             // Draw a dot at the point
             ctx.beginPath();
             ctx.arc(center[0] + x, center[1] + y, 6, 0, 2 * Math.PI);
@@ -88,13 +89,18 @@ export default class ModRing {
             this.drawAllIn(ctx, center, radius);
         }
     }
+    getAngle(i) {
+        return Math.PI / 2 - 2 * Math.PI * i / this.modulus;
+    }
     drawAllIn(ctx, center, radius) {
         for (let i = 0; i < this.modulus; i++) {
-            const x = radius * Math.cos(2 * Math.PI * i / this.modulus);
-            const y = -radius * Math.sin(2 * Math.PI * i / this.modulus);
+            const angle = this.getAngle(i);
+            const x = radius * Math.cos(angle);
+            const y = -radius * Math.sin(angle);
             const j = this.evaluateExpression(i);
-            const xj = radius * Math.cos(2 * Math.PI * j / this.modulus);
-            const yj = -radius * Math.sin(2 * Math.PI * j / this.modulus);
+            const anglej = this.getAngle(j);
+            const xj = radius * Math.cos(anglej);
+            const yj = -radius * Math.sin(anglej);
             drawLine(ctx, center[0] + x, center[0] + y, center[0] + xj, center[0] + yj, this.drawArrows);
         }
     }
@@ -112,11 +118,13 @@ export default class ModRing {
         }
         console.log(path);
         path.forEach(i => {
-            const x = radius * Math.cos(2 * Math.PI * i / this.modulus);
-            const y = -radius * Math.sin(2 * Math.PI * i / this.modulus);
+            const angle = this.getAngle(i);
+            const x = radius * Math.cos(angle);
+            const y = -radius * Math.sin(angle);
             const j = this.evaluateExpression(i);
-            const xj = radius * Math.cos(2 * Math.PI * j / this.modulus);
-            const yj = -radius * Math.sin(2 * Math.PI * j / this.modulus);
+            const anglej = this.getAngle(j);
+            const xj = radius * Math.cos(anglej);
+            const yj = -radius * Math.sin(anglej);
             drawLine(ctx, center[0] + x, center[0] + y, center[0] + xj, center[0] + yj, this.drawArrows);
         });
     }
