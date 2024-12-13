@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  background: #ffffef;
+  font-family: sans-serif;
+}
+
+.hex-container {
+  position: relative;
+  margin: auto;
+  background: #ffffef;
+}
+
+/* Active and Inactive states use the same stroke width.
+   Only color and fill change to avoid shifting lines. */
+svg polygon {
+  fill: #ffffef;
+  stroke: #999;
+  stroke-width: 1px;
+  stroke-linejoin: miter;
+  shape-rendering: crispEdges;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+}
+
+.inactive-hex polygon {
+  fill: #ffffef;
+  stroke: #999;
+}
+
+.active-hex polygon {
+  fill: #EBF5FB;
+  stroke-width: 3px;
+  stroke: #2B4B6F;
+}
+
+.active-hex {
+  z-index: 999;
+}
+
+.hideable.inactive-hex polygon {
+  stroke-width: 0;
+}
