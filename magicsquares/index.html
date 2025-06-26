@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      text-align: center;
+      /* Horizontally center text */
+      vertical-align: middle;
+      /* Vertically center text */
+    }
+
+    table {
+      display: inline-block;
+    }
+
+    th,
+    td {
+      width: 50px;
+      height: 50px;
+    }
+
+    input[type="number"] {
+      width: 30px;
+    }
+  </style>
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <h2>
+    Magic squares using
+    <a href="https://en.wikipedia.org/wiki/Magic_square#A_method_for_constructing_a_magic_square_of_order_3">Lucas'
+      method</a>
+  </h2>
+  <table id="magic-square"></table>
+  <table id="method">
+    <tr>
+      <th>c-b</th>
+      <th>c+a+b</th>
+      <th>c-a</th>
+    </tr>
+    <tr>
+      <td>c-a+b</td>
+      <td>c</td>
+      <td>c+a-b</td>
+    </tr>
+    <tr>
+      <td>c+a</td>
+      <td>c-a-b</td>
+      <td>c+b</td>
+    </tr>
+  </table>
+  <p id="values"></p>
+  <form id="function">
+    <p>
+      <label>a = <input type="number" id="a" placeholder="1" value="1" /></label>
+      <label>b = <input type="number" name="b" placeholder="2" value="2" id="b" /></label>
+      <label>c = <input type="number" name="c" placeholder="3" value="3" id="c" /></label>
+    </p>
+    <p>Reflections</p>
+    <p>
+      <label>Horizontal:
+        <input type="checkbox" name="reflectx" id="reflectx" /></label>,
+      <label>Vertically <input type="checkbox" name="reflecty" id="reflecty" /></label>
+    </p>
+    <p>
+      <label><input type="radio" name="rotate" value="0" checked />0°</label>
+      <label><input type="radio" name="rotate" value="90" />90°</label>
+      <label><input type="radio" name="rotate" value="180" />180°</label>
+      <label><input type="radio" name="rotate" value="270" />270°</label>
+    </p>
+  </form>
+  <p><a href="luoshu.html">Alternative method</a></p>
+</body>
+
+</html>

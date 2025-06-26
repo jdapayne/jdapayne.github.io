@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      text-align: center;
+      /* Horizontally center text */
+      vertical-align: middle;
+      /* Vertically center text */
+    }
+
+    th,
+    td {
+      width: 50px;
+      height: 50px;
+    }
+
+    input[type="number"] {
+      width: 30px;
+    }
+  </style>
+  <script>
+    // Define the array representing the table
+    const luoshu = [
+      [4, 9, 2],
+      [3, 5, 7],
+      [8, 1, 6]
+    ];
+
+
+    // Function to update the table with values from the array
+    function updateTableFromArray(tableArray) {
+      const table = document.getElementById('magic-square'); // Select the table by ID
+      table.innerHTML = ''; // Clear existing table content
+
+      // Iterate over each row in the array
+      tableArray.forEach(row => {
+        const tableRow = document.createElement('tr'); // Create a new table row
+        // Iterate over each cell in the row
+        row.forEach(cell => {
+          const tableCell = document.createElement('td'); // Create a new table cell
+          tableCell.textContent = cell; // Set the cell content to the array value
+          tableRow.appendChild(tableCell); // Add the cell to the row
+        });
+        table.appendChild(tableRow); // Add the row to the table
+      });
+
+      //get and sort values in the array
+      let values = [];
+      for (let i = 1; i <= 9; i++) {
+        values.push(tableArray[Math.floor((i - 1) / 3)][(i - 1) % 3]);
+      }
+      values.sort((a, b) => a - b);
+
+      //display the values
+      document.getElementById('values').innerHTML = values.join(', ');
+    }
+
+    // Function to update the array with ax+b from the original luoshu
+    function updateTable(a, b, reflectx, reflecty, rotate) {
+      let tableArray = luoshu.map(row => row.map(cell => a * cell + b));
+      if (reflectx) {
+        tableArray = reflectHorizontal(tableArray);
+      }
+      if (reflecty) {
+        tableArray = reflectVertical(tableArray);
+      }
+      //rotate by rotate degrees
+      if (rotate) {
+        const n = rotate / 90;
+        for (let i = 0; i < n; i++) {
+          tableArray = rotate90(tableArray);
+        }
+      }
+
+      //integers from 1 to 9j
+      let values = [];
+      for (let i = 1; i <= 9; i++) {
+        values.push(a * i + b);
+      }
+
+      updateTableFromArray(tableArray);
+    }
+
+    //reflect a given 3x3 table horizontally
+    function reflectHorizontal(tableArray) {
+      return tableArray.map(row => row.slice().reverse());
+    }
+
+    function reflectVertical(tableArray) {
+      return tableArray.slice().reverse();
+    }
+
+    function rotate90(tableArray) {
+      return tableArray[0].map((val, index) => tableArray.map(row => row[index]).reverse());
+    }
+
+    function updateValuesFromArray(tableArray) {
+      let values = [];
+      for (let i = 1; i <= 9; i++) {
+        values.push(tableArray[Math.floor((i - 1) / 3)][(i - 1) % 3]);
+      }
+      document.getElementById('values').innerHTML = values.join(', ');
+    }
+
+    // Call the function to initially populate the table
+    document.addEventListener('DOMContentLoaded', function () {
+      updateTableFromArray(luoshu);
+      document.getElementById('function').addEventListener('input', function () {
+        const a = parseFloat(document.getElementById('a').value);
+        const b = parseFloat(document.getElementById('b').value);
+        const reflectx = document.getElementById('reflectx').checked;
+        const reflecty = document.getElementById('reflecty').checked;
+        const rotate = document.querySelector('input[name="rotate"]:checked').value;
+        console.log(a, b);
+        updateTable(a, b, reflectx, reflecty, rotate);
+      });
+    })
+  </script>
+</head>
+
+<body>
+  <h2>Magic squares from linear transformations of the luoshu square</h2>
+  <p><a href="index.html">Another method</a></p>
+  <table id="magic-square">
+  </table>
+  <p id="values"></p>
+  <form id="function">
+    <p>
+      Linear map:
+      <label><input type="number" id="a" placeholder="1" value="1"></label>n +
+      <label><input type="number" name="b" placeholder="0" value="0" id="b"></label>
+    </p>
+    <p>Reflections</p>
+    <p><label>Horizontal: <input type="checkbox" name="reflectx" id="reflectx"></label>, <label>Vertically <input
+          type="checkbox" name="reflecty" id="reflecty"></label> </p>
+    <p>
+      <label><input type="radio" name="rotate" value="0" checked>0°</label>
+      <label><input type="radio" name="rotate" value="90">90°</label>
+      <label><input type="radio" name="rotate" value="180">180°</label>
+      <label><input type="radio" name="rotate" value="270">270°</label>
+    </p>
+  </form>
+</body>
+
+</html>
+</body>
+
+</html>
