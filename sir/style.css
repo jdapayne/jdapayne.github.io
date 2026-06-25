@@ -1,0 +1,129 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 240px;
+  border-right: 1px solid #ccc;
+  padding: 14px;
+  box-sizing: border-box;
+}
+
+/* layout: make sidebar a column so we can pin a section to the bottom */
+.sidebar{
+  display: flex;
+  flex-direction: column;
+  background: #eee;
+}
+
+.section {
+  margin-bottom: 15px;
+  padding: 3px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* pin the simulation controls to the bottom */
+.section.simulation {
+  margin-top: auto;
+}
+
+h3 {
+  margin: 3px 0 5px 0;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  margin-bottom: 5px;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input.parameter {
+  width: 50px;
+  margin-bottom: 5px;
+  padding: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+  text-align: right;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.row button {
+  flex: 1;
+}
+
+.statTitle {
+  font-weight: bold;
+  border: 1px solid #ccc;
+  width: 50px;
+  display: inline-block;
+  text-align: right;
+  padding: 2px 5px;
+}
+
+.statValue {
+  display: inline-block;
+  width: 40px;
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 2px 5px;
+}
+
+/* Sidebar stats table styling */
+.sidebar table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #bbb; /* table border */
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  color: #000;
+}
+
+.sidebar table th,
+.sidebar table td {
+  padding: 8px 10px;
+  font-size: 14px;
+  border-bottom: 1px solid #eee; /* grid lines lighter than border */
+  border-right: 1px solid #eee;
+}
+
+.sidebar table tr:last-child td,
+.sidebar table tr:last-child th {
+  border-bottom: none;
+}
+
+.sidebar table td:first-child,
+.sidebar table th:first-child {
+  font-weight: 700; /* first column bold */
+  color: #333;
+  width: 90px;
+}
+
+svg {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid #ccc;
+  display: block;
+  background: #fafafa;
+  touch-action: none;
+}
