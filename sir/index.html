@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SIR Simulator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Canvas -->
+  <svg id="canvas" width="100%" height="100%"></svg>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <div class="section">
+      <h3>Set up</h3>
+      <button onclick="randomise()">Randomise</button>
+
+      <div class="row">
+        <button onclick="modifyConnections(true)">+</button>
+        <button onclick="modifyConnections(false)">−</button>
+      </div>
+    </div>
+
+
+
+    <div class="section">
+      <h3>Parameters</h3>
+      <label>Infection </label>
+      <input class = "parameter" id="pInfect" type="number" value="40" min="0" max="100" /> %
+      <br/>
+      <label>Recovery </label>
+      <input class = "parameter" id="pRecover" type="number" value="20" min="0" max="100" /> %
+    </div>
+
+    <div class="section">
+      <h3>Vaccination</h3>
+      <label><input id="enableVaccination" type="checkbox" /> Enable vaccinations</label>
+      <br/>
+      <label>Effectiveness </label>
+      <input class="parameter" id="vEffect" type="number" value="85" min="0" max="100" /> %
+    </div>
+
+    <div class="section">
+      <h3>Stats</h3>
+      <table>
+        <tr>
+          <td>Step</td>
+          <td><span id="stepCount">0</span></td>
+        </tr>
+        <tr>
+          <td>Susceptible</td>
+          <td><span id="countS"></span></td>
+        </tr>
+        <tr>
+          <td>Infected</td>
+          <td><span id="countI"></span></td>
+        </tr>
+        <tr>
+          <td>Recovered</td>
+          <td><span id="countR"></span></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section simulation">
+      <h3>Simulation</h3>
+      <button onclick="step()">Step</button>
+      <button onclick="reset()">Reset</button>
+    </div>
+
+  </div>
+
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
